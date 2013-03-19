@@ -1,22 +1,20 @@
 package com.example.keycardapp;
 
-import android.os.Bundle;
-import android.app.Activity;
 import android.app.ListActivity;
-import android.content.Context;
-import android.view.LayoutInflater;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends ListActivity {
 
-	private ArrayAdapter<?> adapter;
-	private String[] values = {"Funker", "Fett", "Nu"};
+	private CardAdapter adapter;
+	private CardData[] values = new CardData[] 
+	{
+			new CardData("ABC"), 
+			new CardData("DEF", true)
+	};
 	
 	
 	@Override
@@ -39,56 +37,7 @@ public class MainActivity extends ListActivity {
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
 		Toast.makeText(this, "Pressed: " + id, Toast.LENGTH_SHORT).show();
 	}
-	
-	
-	public class CardAdapter extends ArrayAdapter<String>{
-
-		Context context;
-		int layoutResourceId;
-		String data[];
-		
-		public CardAdapter(Context context, int textViewResourceId,
-				String[] objects) {
-			super(context, textViewResourceId, objects);
-			
-			this.layoutResourceId = textViewResourceId;
-			this.context = context;
-			this.data = objects;
-			
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			//return super.getView(position, convertView, parent);
-			View row = convertView;
-			TextView text;
-			
-			if (row == null)
-			{
-				LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-				row = inflater.inflate(layoutResourceId, parent, false);
-				
-				text = (TextView)row.findViewById(R.id.cardName);
-				
-				row.setTag(text);
-			
-			}
-			else
-			{
-				text = (TextView)row.getTag();
-			}
-			
-			String rowText = data[position] + "HORE";
-			
-			text.setText(rowText);
-			
-			return row;
-		}
-		
-	}
-	
 }
