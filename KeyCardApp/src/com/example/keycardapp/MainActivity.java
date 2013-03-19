@@ -12,8 +12,11 @@ public class MainActivity extends ListActivity {
 	private CardAdapter adapter;
 	private CardData[] values = new CardData[] 
 	{
-			new CardData("ABC"), 
-			new CardData("DEF", true)
+			new CardData("House Key"), 
+			new CardData("Job Card"),
+			new CardData("School Card"),
+			new CardData("Buss Card"),
+			new CardData("Girlfriend Key"),
 	};
 	
 	
