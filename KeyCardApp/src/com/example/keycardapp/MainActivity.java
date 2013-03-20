@@ -1,5 +1,6 @@
 package com.example.keycardapp;
 
+import com.loopj.android.http.*;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -41,6 +42,23 @@ public class MainActivity extends ListActivity {
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-		Toast.makeText(this, "Pressed: " + id, Toast.LENGTH_SHORT).show();
+		//Toast.makeText(this, "Pressed: " + id, Toast.LENGTH_SHORT).show();
+		printMSG("Pressed: " + id);
+		testServer();
+	}
+	
+	private void printMSG(String msg) {
+		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+	}
+	
+	private void testServer() {
+		printMSG("gets to test");
+		AsyncHttpClient client = new AsyncHttpClient();
+		client.get("http://www.google.com", new AsyncHttpResponseHandler() {
+		    @Override
+		    public void onSuccess(String response) {
+		        printMSG(response);
+		    }
+		});
 	}
 }
