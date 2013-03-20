@@ -11,6 +11,10 @@ import android.widget.Toast;
 public class MainActivity extends ListActivity {
 
 	private CardAdapter adapter;
+	private AsyncHttpClient client;
+	
+	
+	
 	private CardData[] values = new CardData[] 
 	{
 			new CardData("House Key"), 
@@ -29,6 +33,8 @@ public class MainActivity extends ListActivity {
 		adapter = new CardAdapter(this, R.layout.card_row, values);
 		
 		setListAdapter(adapter);
+		
+		Communication.initCommunication(this, "tom", "tom");
 	}
 
 	@Override
@@ -43,22 +49,83 @@ public class MainActivity extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		//Toast.makeText(this, "Pressed: " + id, Toast.LENGTH_SHORT).show();
-		printMSG("Pressed: " + id);
-		testServer();
+		//printMSG("Pressed: " + id);
+		
+		
+		getMyCards();
+		
+		
+		//testServer();
 	}
+	
+	
+	private void getMyCards(){
+		
+		AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
+			@Override
+			public void onFailure(Throwable exep, String msg) {
+				printMSG("Error in get cards: " + msg);
+			}
+			
+			@Override
+		    public void onSuccess(String response) {
+		        printMSG(response);
+		    }
+		};
+		
+		
+		Communication.get("/cards", new RequestParams(), handler);
+	}
+	
 	
 	private void printMSG(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 	}
 	
-	private void testServer() {
-		printMSG("gets to test");
-		AsyncHttpClient client = new AsyncHttpClient();
-		client.get("http://www.google.com", new AsyncHttpResponseHandler() {
+	
+	
+	private void testGet(){
+		client.get("http://129.242.22.146/cards", new AsyncHttpResponseHandler() {
 		    @Override
+			public void onFailure(Throwable arg0, String arg1) {
+		    	printMSG("ERROR " + arg1);
+			}
+
+			@Override
 		    public void onSuccess(String response) {
 		        printMSG(response);
 		    }
 		});
+	}
+	
+	private void testServer() {
+		printMSG("gets to test");
+		
+		RequestParams params = new RequestParams();
+		
+		params.put("user", "test");
+		params.put("password", "test");
+		
+		
+		client = new AsyncHttpClient();
+		
+		//client.setBasicAuth("test", "test", new AuthScope("http://129.242.22.146/accounts/login", 80, AuthScope.ANY_REALM));
+		
+		PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
+		client.setCookieStore(myCookieStore);
+		
+		client.get("http://129.242.22.146/accounts/login", params, new AsyncHttpResponseHandler() {
+			@Override
+			public void onFailure(Throwable arg0, String arg1) {
+		    	printMSG("ERROR in login" + arg1);
+			}
+			
+			@Override
+		    public void onSuccess(String response) {
+		        printMSG("Login "+ response);
+		        testGet();
+		    }
+		});
+		
 	}
 }
