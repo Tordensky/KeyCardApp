@@ -1,0 +1,8 @@
+03-21 11:29:47.265: V/ANDROID APP(18068): RES: 
+{ "cards": 
+	[
+		{"role": 0, "expiry_date": "2013-03-28T13:37:45+00:00", "type": "B", "name": "Schoolcard", "value": "randomstring"}, 
+		{"role": 0, "expiry_date": "2013-03-31T12:37:56+00:00", "type": "A", "name": "Busscard", "value": "randomagainstring"}, 
+		{"role": 0, "expiry_date": "2013-03-27T13:38:09+00:00", "type": "XXX", "name": "MasterofAllCards", "value": "MasterKey"}
+	]
+}

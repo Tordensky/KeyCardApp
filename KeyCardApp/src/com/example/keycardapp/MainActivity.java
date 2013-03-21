@@ -49,8 +49,11 @@ public class MainActivity extends ListActivity {
 
 	private void getMyCardsNew(){
 		JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
+			
+
 			@Override
 			public void onSuccess(JSONObject cardData) {
+				printMSG("GOT SUCCES JSON");
 				try {
 					JSONArray cards = cardData.getJSONArray("cards");
 					
@@ -72,12 +75,12 @@ public class MainActivity extends ListActivity {
 			}
 
 			@Override
-			public void onFailure(Throwable exep, JSONObject object) {
+			public void onFailure(Throwable exep, String eror) {
 				printMSG("Error in get cards! Exep: " + exep.getMessage());
 				
 				// Try to login again
 				if (exep.getMessage().equalsIgnoreCase("Unauthorized")){
-					printMSG("Tryes to login");
+					printMSG("Tries to login");
 					Communication.login();
 				}
 			}
