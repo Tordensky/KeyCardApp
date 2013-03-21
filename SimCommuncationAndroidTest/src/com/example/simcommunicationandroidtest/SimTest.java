@@ -1,22 +1,74 @@
 package com.example.simcommunicationandroidtest;
 
+import org.simalliance.openmobileapi.SEService;
+import org.simalliance.openmobileapi.SEService.CallBack;
+
+import com.library.UICCCommunication.Communication;
+
+
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 public class SimTest extends Activity {
-
+	private SEService seService; 
+	private Communication communication;
+	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_sim_test);
+	public void onCreate(Bundle savedInstanceState) {
+	  final String LOG_TAG = "HelloSmartcard";
+	  communication = new Communication();
+	  super.onCreate(savedInstanceState);
+	  
+	  try {
+		    Log.i(LOG_TAG, "creating SEService object");
+		    seService = new SEService(this, null);
+		  } catch (SecurityException e) {
+		    Log.e(LOG_TAG, "Binding not allowed, uses-permission org.simalliance.openmobileapi.SMARTCARD?");
+		  } catch (Exception e) {
+		    Log.e(LOG_TAG, "Exception: " + e.getMessage());
+		  }
+		 
+	  
+	  
+	  LinearLayout layout = new LinearLayout(this);
+	  layout.setLayoutParams(new LayoutParams(
+	          LayoutParams.WRAP_CONTENT,
+	          LayoutParams.WRAP_CONTENT));
+
+	  Button button = new Button(this);
+	  button.setLayoutParams(new LayoutParams(
+	          LayoutParams.WRAP_CONTENT,
+	          LayoutParams.WRAP_CONTENT));
+
+	  button.setText("Click Me");
+	  button.setOnClickListener(new OnClickListener() {
+	    public void onClick(View v) {
+	    	byte[] empty = new byte[] {0x00, 0x03, (byte)0xD0, 0x00, 0x00};
+	     	communication.writeData(seService, empty);
+
+	    }
+	  });
+
+	  layout.addView(button);
+	  setContentView(layout);
+	  
+	  
+
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_sim_test, menu);
-		return true;
-	}
 
+	@Override
+	protected void onDestroy() {
+	   if (seService != null && seService.isConnected()) {
+	      seService.shutdown();
+	   }
+	   super.onDestroy();
+	} 
 }
