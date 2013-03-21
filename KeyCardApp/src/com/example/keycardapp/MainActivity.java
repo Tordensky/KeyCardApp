@@ -3,7 +3,6 @@ package com.example.keycardapp;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.loopj.android.http.*;
 import android.app.ListActivity;
 import android.os.Bundle;
@@ -38,8 +37,8 @@ public class MainActivity extends ListActivity {
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-		//Toast.makeText(this, "Pressed: " + id, Toast.LENGTH_SHORT).show();
-		//printMSG("Pressed: " + id);
+		Toast.makeText(this, "Pressed: " + id, Toast.LENGTH_SHORT).show();
+		printMSG("Pressed: " + id);
 	}
 	
 	private void setListData(){

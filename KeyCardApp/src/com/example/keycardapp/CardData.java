@@ -5,6 +5,9 @@ public class CardData {
 	public String cardName;
 	public Boolean active = false;
 	
+	public String expire = "";
+	public String type = "";
+	
 	
 	public CardData(){
 		super();
@@ -19,5 +22,13 @@ public class CardData {
 		super();
 		this.cardName = cardName;
 		this.active = active;
+	}
+	
+	public CardData(String cardName, Boolean active, String expire, String type){
+		super();
+		this.cardName = cardName;
+		this.active = active;
+		this.expire = expire;
+		this.type = type;
 	}
 }
