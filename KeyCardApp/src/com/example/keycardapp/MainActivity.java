@@ -1,5 +1,8 @@
 package com.example.keycardapp;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import com.loopj.android.http.*;
 import android.app.ListActivity;
 import android.os.Bundle;
@@ -11,122 +14,80 @@ import android.widget.Toast;
 public class MainActivity extends ListActivity {
 
 	private CardAdapter adapter;
-	private AsyncHttpClient client;
-	
-	
-	
-	private CardData[] values = new CardData[] 
-	{
-			new CardData("House Key"), 
-			new CardData("Job Card"),
-			new CardData("School Card"),
-			new CardData("Buss Card"),
-			new CardData("Girlfriend Key"),
-	};
-	
-	
+	private CardData[] values = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		adapter = new CardAdapter(this, R.layout.card_row, values);
-		
-		setListAdapter(adapter);
-		
+
 		Communication.initCommunication(this, "tom", "tom");
 		
+		getMyCardsNew();	
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
-		
+
 		return true;
 	}
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-		//Toast.makeText(this, "Pressed: " + id, Toast.LENGTH_SHORT).show();
-		//printMSG("Pressed: " + id);
-		
-		
-		getMyCards();
-		
-		
-		//testServer();
+		Toast.makeText(this, "Pressed: " + id, Toast.LENGTH_SHORT).show();
+		printMSG("Pressed: " + id);
 	}
 	
-	
-	private void getMyCards(){
+	private void setListData(){
+		adapter = new CardAdapter(this, R.layout.card_row, values);
 		
-		AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
+		setListAdapter(adapter);
+	}
+
+	private void getMyCardsNew(){
+		JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
 			@Override
-			public void onFailure(Throwable exep, String msg) {
-				printMSG("Error in get cards: " + msg + "Exep: " + exep.getCause());
-			}
-			
-			@Override
-		    public void onSuccess(String response) {
-		        printMSG(response);
-		    }
-		};
-		
-		
-		Communication.get("/cards", new RequestParams(), handler);
-	}
-	
-	
-	private void printMSG(String msg) {
-		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-	}
-	
-	
-	
-	private void testGet(){
-		client.get("http://129.242.22.146/cards", new AsyncHttpResponseHandler() {
-		    @Override
-			public void onFailure(Throwable arg0, String arg1) {
-		    	printMSG("ERROR " + arg1);
+			public void onSuccess(JSONObject cardData) {
+				try {
+					JSONArray cards = cardData.getJSONArray("cards");
+					
+					values = new CardData[cards.length()];
+					
+					// Traverse Cards
+					for (int i = 0; i < cards.length(); i++) {
+						JSONObject card = (JSONObject) cards.get(i);
+						
+						values[i] = new CardData(card.getString("name"));
+					}
+					
+					setListData();
+				
+				} catch (JSONException e) {
+					e.printStackTrace();
+					printMSG("PARSE ERROR");
+				}
 			}
 
 			@Override
-		    public void onSuccess(String response) {
-		        printMSG(response);
-		    }
-		});
-	}
-	
-	public void testServer() {
-		printMSG("gets to test");
-		
-		RequestParams params = new RequestParams();
-		
-		params.put("user", "test");
-		params.put("password", "test");
-		
-		
-		client = new AsyncHttpClient();
-		
-		//client.setBasicAuth("test", "test", new AuthScope("http://129.242.22.146/accounts/login", 80, AuthScope.ANY_REALM));
-		
-		PersistentCookieStore myCookieStore = new PersistentCookieStore(this);
-		client.setCookieStore(myCookieStore);
-		
-		client.get("http://129.242.22.146/accounts/login", params, new AsyncHttpResponseHandler() {
-			@Override
-			public void onFailure(Throwable arg0, String arg1) {
-		    	printMSG("ERROR in login" + arg1);
+			public void onFailure(Throwable exep, JSONObject object) {
+				printMSG("Error in get cards! Exep: " + exep.getMessage());
+				
+				// Try to login again
+				if (exep.getMessage().equalsIgnoreCase("Unauthorized")){
+					printMSG("Tryes to login");
+					Communication.login();
+				}
 			}
-			
-			@Override
-		    public void onSuccess(String response) {
-		        printMSG("Login "+ response);
-		        testGet();
-		    }
-		});
-		
+		};
+
+		Communication.get("/cards/", new RequestParams(), handler);
+	}
+
+
+	private void printMSG(String msg) {
+		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 	}
 }
