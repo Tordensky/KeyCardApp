@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright © 2008 Sun Microsystems, Inc.  All rights reserved.
+  Sun Microsystems, Inc. has intellectual property rights relating to technology
+  embodied in the product that is described in this document. In particular, and
+  without limitation, these intellectual property rights may include one or more
+  of the U.S. patents listed at http://www.sun.com/patents and one or more
+  additional patents or pending patent applications in the U.S. and in other
+  countries.U.S. Government Rights - Commercial software.  Government users are
+  subject to the Sun Microsystems, Inc. standard license agreement and
+  applicable provisions of the FAR and its supplements.  This distribution may
+  include materials developed by third parties.Portions may be derived from
+  Berkeley BSD systems, licensed from U. of CA.  Sun,  Sun Microsystems,  the
+  Sun logo,  Java,  Solaris and  Java Card are trademarks or registered
+  trademarks of Sun Microsystems, Inc. in the U.S. and other countries.  UNIX is
+  a registered trademark in the U.S. and other countries, exclusively licensed
+  through X/Open Company, Ltd.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:jcns="http://java.sun.com/xml/ns/javacard"
+            targetNamespace="http://java.sun.com/xml/ns/javacard"
+            elementFormDefault="qualified"
+            version="3.0">
+	<xsd:annotation>
+		<xsd:documentation><![CDATA[
+
+	This is the XML Schema for the Java Card Applet Application Deployment
+        Descriptor. The Java Card Applet Application Deployment Descriptor
+        must be named "APPLET-INF/applet.xml" in the applet module file.
+        All Java Card Applet Application Deployment Descriptors
+	must indicate the applet application schema by using the javacard
+	namespace:
+
+	http://java.sun.com/xml/ns/javacard
+
+	and by indicating the version of the schema by
+	using the version element as shown below:
+
+	    <applet-app xmlns="http://java.sun.com/xml/ns/javacard"
+	      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	      xsi:schemaLocation="..."
+	      version="3.0">
+	      ...
+	    </applet-app>
+
+	The instance documents may indicate the published version of
+	the schema using the xsi:schemaLocation attribute for JC Applet application
+	namespace with the following location:
+
+	http://java.sun.com/xml/javacard/applet-app_3_0.xsd
+	]]></xsd:documentation>
+	</xsd:annotation>
+        <!-- **************************************************** -->
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"
+				schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+        <!-- **************************************************** -->
+	<xsd:element name="applet-app" type="jcns:applet-appType"/>
+        <!-- **************************************************** -->
+         <xsd:complexType name="descriptionType">
+            <xsd:annotation>
+                <xsd:documentation>
+
+                The description type is used by a description element to
+                provide text describing the parent element.  The elements
+                that use this type should include any information that the
+                Deployment Component's Deployment File file producer wants
+                to provide to the consumer of the Deployment Component's
+                Deployment File (i.e., to the Deployer). Typically, the
+                tools used by such a Deployment File consumer will display
+                the description when processing the parent element that
+                contains the description.
+
+                The lang attribute defines the language that the
+                description is provided in. The default value is "en" (English).
+
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleContent>
+              <xsd:extension base="xsd:string">
+                <xsd:attribute ref="xml:lang"/>
+              </xsd:extension>
+            </xsd:simpleContent>
+          </xsd:complexType>        
+        <!-- **************************************************** -->
+        <xsd:complexType name="display-nameType">
+        <xsd:annotation>
+          <xsd:documentation>
+            <![CDATA[
+
+              The display-name type contains a short name that is intended
+              to be displayed by tools. It is used by display-name
+              elements.  The display name need not be unique.
+
+              Example:
+
+              ...
+                 <display-name xml:lang="en">Employee Self Service</display-name>
+
+              The value of the xml:lang attribute is "en" (English) by default.
+
+              ]]>
+          </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+          <xsd:extension base="xsd:string">
+            <xsd:attribute ref="xml:lang"/>
+          </xsd:extension>
+        </xsd:simpleContent>
+        </xsd:complexType>
+
+        <!-- **************************************************** -->
+        <xsd:simpleType name="AIDType">
+            <xsd:annotation>
+                <xsd:documentation>The AID is represented as an URI string. Each byte
+                of the AID is expressed by 2 hex digits in upper case. The AID uri is prefixed with
+                "//aid" to denote the AID registry-based namespace authority. And the RID and
+                PIX are separated by a slash. The "-" symbol in the PIX slot indicates no PIX.
+                For example, the Sun RI sample JavaPurse
+                applet is represented by the applet application URL
+                "//aid/A000000062/03010C0201"</xsd:documentation>
+            </xsd:annotation>
+            <xsd:restriction base="xsd:string">
+                <xsd:pattern value="//aid/([0-9A-F]{2}){5}/((([0-9A-F]{2}){1,11})|-)"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+        <!-- **************************************************** -->      
+        <xsd:simpleType name="applet-app-versionType">
+            <xsd:annotation>
+              <xsd:documentation>
+
+                This type contains the recognized versions of
+                Java Card Applet Application Deployment Descriptor supported.
+                It is used to designate the version of the application.
+
+              </xsd:documentation>
+            </xsd:annotation>
+            <xsd:restriction base="xsd:token">
+              <xsd:enumeration value="3.0"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+        <!-- **************************************************** -->
+        <xsd:complexType name="applet-appType">
+            <xsd:annotation>
+                <xsd:documentation>The applet-app element is the root element of
+                the Java Card Applet Application Deployment Descriptor.
+                The descriptor includes information about applet classes
+                and their AID attributes.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:sequence>
+                <xsd:element name="description" type="jcns:descriptionType" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="display-name" type="jcns:display-nameType" minOccurs="0"/>
+                <xsd:element name="applet" minOccurs="1" maxOccurs="unbounded">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="description"
+                                       type="jcns:descriptionType"
+                                       minOccurs="0"
+                                       maxOccurs="unbounded"/>
+                           <xsd:element name="display-name"
+                                       type="jcns:display-nameType"
+                                       minOccurs="0"/>
+                            <xsd:element name="applet-class" type="xsd:string">
+                                <xsd:annotation>
+                                    <xsd:documentation>The applet class is in the form of a
+                                    "binary name", as defined in the JLS.  This is the form
+                                    of name used in Class.forName().  Tools that need the
+                                    canonical name (the name used in source code) will need
+                                    to convert this binary name to the canonical name.
+                                    </xsd:documentation>
+                                </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element name="applet-AID" type="jcns:AIDType"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+            <xsd:attribute name="version"
+               type="jcns:applet-app-versionType"
+               use="required"/>
+        </xsd:complexType>
+        <!-- **************************************************** -->
+</xsd:schema>
+

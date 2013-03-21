@@ -1,0 +1,62 @@
+//Test script for Applet 'TagType4'
+
+//NOTE: Seems like each command must end with 0x00, just so there is enough data, not really used
+
+// Format of C - APDU for tag type 4:
+//  byte     byte   byte   byte      byte               bytes           byte 
+//------------------------------------------------------------------------------------
+//|  CLA  |  INS  |  P1  |  P2  |  LC(optional)  |  Data(optional)  |  Le(optional)  |
+//| class | instr.| param| param| length of cmd  | Data bytes(LC)   | Size of resp.  |
+//------------------------------------------------------------------------------------
+//
+//Class Byte: Shall be set to 00 (no secure messaging)
+//Instruction Byte: Indicates the command process
+//Parameter Byte 1: Shall be set to 00 if no value is specified for instruction use
+//Parameter Byte 2: Shall be set to 00 if no value is specified for instruction use
+//Data Field Length LC: Optional. If present, it shall contain the number of bytes in the data field of the command and it shall not be 0
+//Data Field: Optional
+//Expcepted Response Length Le: Optional. If present the response R-APDU contains the number of expceted bytes
+
+//Format of R - APDU for tag type 4:
+//  bytes            byte     byte
+//-----------------------------------
+//| Response body |   SW1  |  SW2   |
+//-----------------------------------
+
+//Response body: optional. it carries the date of the R-APDU
+// Response statuse bytes:  SW1 and SW2 is mandatory and shows what kind of error the R-APDU contains 90 00 symbolises correctness
+
+
+// ************************************************************************************
+//                          Script starts from here
+//*************************************************************************************
+
+powerup; //Important, must be first, if not no APDU commands can be sendt
+// Select tag4 //aid/D276000085/0101
+0x00 0xA4 0x04 0x00 0X07 0XD2 0X76 0X00 0X00 0X85 0X01 0x01 0x00;
+
+
+//Select Capability Container (CC)
+0x00 0xA4 0x00 0x0C 0x02 0xE1 0x03 0x00;
+
+//Read binary from CC File (Important seems like the read ins B0, dosn't work, all the 0x00 after 0x0F is a hack, to make it work)
+0x00 0xB0 0x00 0x00 0x0F 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00;
+
+//Select Ndef
+0x00 0xA4 0x00 0x0C 0x02 0xE1 0x04 0x00;
+
+//read binary NLEN (Same hack)
+0x00 0xB0 0x00 0x00 0x02 0x00 0x00 0x00;
+
+//Lets now just write something into he NDEF Message, then read it to check if all work correctly
+//Writing an empty NDEF message into the ndef record
+0x00 0xD6 0x00 0x00 0x05 0x00 0x03 0xD0 0x00 0x00 0x00;
+
+//Now lets try reading it and see if we can get out that empty record (Still the hack)
+0x00 0xB0 0x00 0x00 0x05 0x00 0x00 0x00 0x00 0x00 0x00;
+
+powerdown; 
+
+// ************************************************************************************
+//                          Script ends from here
+//*************************************************************************************
