@@ -50,7 +50,7 @@ public class SimTest extends Activity {
 	  button.setText("Click Me");
 	  button.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
-	    	byte[] empty = new byte[] {0x00, 0x03, (byte)0xD0, 0x00, 0x00};
+	    	byte[] empty = new byte[] {(byte)0xD0, 0x00, 0x00};
 	     	communication.writeData(seService, empty);
 
 	    }
