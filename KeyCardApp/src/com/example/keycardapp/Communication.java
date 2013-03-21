@@ -1,5 +1,7 @@
 package com.example.keycardapp;
 
+import org.apache.http.cookie.Cookie;
+
 import android.content.Context;
 import android.widget.Toast;
 
@@ -18,6 +20,8 @@ public class Communication {
 	
 	private static Context context = null;
 	
+	public static int test = 2;
+	
 	public static void initCommunication(Context contx, String usrName, String usrPswrd) {
 		myCookieStore = new PersistentCookieStore(contx);
 		client.setCookieStore(myCookieStore);
@@ -27,18 +31,18 @@ public class Communication {
 		
 		context = contx;
 		
-		initiateSession();
+		login();
+		
+		test = 3;
 	}
 	
-	private static void initiateSession(){
+	public static void login() {
 		RequestParams params = new RequestParams();
-		params.put("user", userName);
-		params.put("password", password);
 		
 		AsyncHttpResponseHandler loginHandler = new AsyncHttpResponseHandler() {
 			@Override
 			public void onFailure(Throwable exep, String msg) {
-				printMsg("ERROR IN LOGIN: " + msg);
+				printMsg("ERROR in Login: " + msg + " Exep: " + exep.getMessage());
 			}
 			
 			@Override
@@ -47,14 +51,28 @@ public class Communication {
 		    }
 		};
 		
-		get(LOGIN_URL, params, loginHandler);
+		params.put("user", userName);
+		params.put("password", password);
+		
+		client.get(getAbsoluteUrl(LOGIN_URL), params, loginHandler);
+		
+		printCookies();
+		
 	}
 	
-	public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler){
+	private static void printCookies() {
+		for (Cookie cookie : myCookieStore.getCookies()) {
+			printMsg("Name: "+ cookie.getName() + "DOMAIN: " + cookie.getDomain() + " PATH: " + cookie.getPath());
+		}
+	}
+	
+	public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+		printCookies();
+		
 		client.get(getAbsoluteUrl(url), params, responseHandler);
 	}
 	
-	public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler){
+	public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
 		client.get(getAbsoluteUrl(url), params, responseHandler);
 	}
 	

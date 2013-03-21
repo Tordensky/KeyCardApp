@@ -35,6 +35,7 @@ public class MainActivity extends ListActivity {
 		setListAdapter(adapter);
 		
 		Communication.initCommunication(this, "tom", "tom");
+		
 	}
 
 	@Override
@@ -64,7 +65,7 @@ public class MainActivity extends ListActivity {
 		AsyncHttpResponseHandler handler = new AsyncHttpResponseHandler() {
 			@Override
 			public void onFailure(Throwable exep, String msg) {
-				printMSG("Error in get cards: " + msg);
+				printMSG("Error in get cards: " + msg + "Exep: " + exep.getCause());
 			}
 			
 			@Override
@@ -98,7 +99,7 @@ public class MainActivity extends ListActivity {
 		});
 	}
 	
-	private void testServer() {
+	public void testServer() {
 		printMSG("gets to test");
 		
 		RequestParams params = new RequestParams();
