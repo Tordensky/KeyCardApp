@@ -21,9 +21,11 @@ public class MainActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		Communication.initCommunication(this, "tom", "tom");
+		//Communication.initCommunication(this, "tom", "tom");
 		
-		getMyCardsNew();	
+		//getMyCardsNew();
+		
+		getCardDataForTesting();
 	}
 
 	@Override
@@ -45,6 +47,22 @@ public class MainActivity extends ListActivity {
 		adapter = new CardAdapter(this, R.layout.card_row, values);
 		
 		setListAdapter(adapter);
+	}
+	
+	private void getCardDataForTesting() {
+		values = new CardData[] {
+			new CardData("Husnøkkel"),
+			new CardData("Jobbkort"),
+			new CardData("Studentkort"),
+			new CardData("Expertkort"),
+			new CardData("Husnøkkel"),
+			new CardData("Jobbkort"),
+			new CardData("Studentkort"),
+			new CardData("Expertkort"),
+			new CardData("Busskort")
+		};
+		
+		setListData();
 	}
 
 	private void getMyCardsNew(){

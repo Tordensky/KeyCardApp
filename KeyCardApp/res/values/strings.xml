@@ -16,5 +16,6 @@
     <string name="username">Username:</string>
     <string name="login">Log in</string>
     <string name="newUser">New User</string>
+    <string name="new_card">New Card</string>
 
 </resources>

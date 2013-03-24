@@ -94,7 +94,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
-                android:text="@string/login" />
+                android:text="@string/login" 
+                android:onClick="loginButtonAction"/>
 
             <Button
                 android:id="@+id/newUserButton"
@@ -103,6 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
+                android:onClick="newButtonAction"
                 android:text="@string/newUser" />
         </LinearLayout>
 
