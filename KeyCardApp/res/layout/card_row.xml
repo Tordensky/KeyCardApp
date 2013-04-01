@@ -1,48 +1,61 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/row_main_screen"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:layout_marginTop="10dp"
+    android:gravity="center" >
+
+    <ImageView
+        android:id="@+id/activeImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitStart"
+        android:src="@drawable/background_active" />
 
     <ImageView
         android:id="@+id/rowIcon"
-        android:layout_width="62dp"
-        android:layout_height="69dp"
-        android:layout_margin="5dp"
-        android:src="@drawable/ic_launcher" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/activeImage"
+        android:layout_alignLeft="@+id/activeImage"
+        android:adjustViewBounds="true"
+        android:maxWidth="95dp"
+        android:scaleType="fitStart"
+        android:src="@drawable/icon_house" />
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/activeImage"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentRight="false"
+        android:layout_alignParentTop="false"
+        android:layout_alignRight="@id/activeImage"
+        android:layout_alignTop="@id/activeImage"
+        android:layout_toRightOf="@+id/rowIcon"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/cardName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/hello_world"
-            android:textColor="@color/whiteText"
+            android:layout_gravity="center"
+            android:layout_marginTop="29dp"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/valid_txt"
+            android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="2dp"
-            android:text="Valid: 12.01.14"
-            android:textColor="@color/whiteText"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/type_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="Type: A"
-            android:textColor="@color/whiteText"
-            android:textSize="10sp" />
+            android:layout_gravity="center"
+            android:text="Expires in 29days"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

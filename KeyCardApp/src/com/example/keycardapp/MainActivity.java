@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.loopj.android.http.*;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -39,8 +40,16 @@ public class MainActivity extends ListActivity {
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-		Toast.makeText(this, "Pressed: " + id, Toast.LENGTH_SHORT).show();
-		printMSG("Pressed: " + id);
+		
+		CardAdapter adapter = (CardAdapter)l.getAdapter();
+		CardData rowData = (CardData)adapter.getItem(position);
+		
+		changeState(rowData);
+		
+		adapter.notifyDataSetChanged();
+		
+		//Toast.makeText(this, "Pressed: " + id + "Active: " + rowData.active, Toast.LENGTH_SHORT).show();
+		
 	}
 	
 	private void setListData(){
@@ -49,26 +58,46 @@ public class MainActivity extends ListActivity {
 		setListAdapter(adapter);
 	}
 	
+	private void changeState(CardData rowData) {
+		if (rowData.active) {
+			rowData.active = false;
+			
+			// TODO Add code for deactivating card here
+		} else {
+			rowData.active = true;
+			
+			// TODO Add code for Activating card here
+		}
+	}
+	
+	// Binded in XML layout to button
+	public void newCard(View v){
+		Intent intent = new Intent(this, CreateNewCardActivity.class);
+		startActivity(intent);
+	}
+	
 	private void getCardDataForTesting() {
 		values = new CardData[] {
-			new CardData("Husnøkkel"),
-			new CardData("Jobbkort"),
-			new CardData("Studentkort"),
-			new CardData("Expertkort"),
-			new CardData("Husnøkkel"),
-			new CardData("Jobbkort"),
-			new CardData("Studentkort"),
-			new CardData("Expertkort"),
-			new CardData("Busskort")
+			new CardData("Busskort", true, 1),
+			new CardData("Busskort", true, 2),
+			new CardData("Busskort", true, 3),
+			new CardData("Busskort", true, 4),
+			new CardData("Busskort", true, 5),
+			new CardData("Busskort", true),
+			new CardData("Busskort", true)
+			//new CardData("Jobbkort", false, 1),
+			//new CardData("Studentkort", false, 1)
+			//new CardData("Expertkort", false, 4),
+			//new CardData("Busskort", true)
 		};
 		
 		setListData();
 	}
 
+	@SuppressWarnings("unused")
 	private void getMyCardsNew(){
 		JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
 			
-
 			@Override
 			public void onSuccess(JSONObject cardData) {
 				printMSG("GOT SUCCES JSON");

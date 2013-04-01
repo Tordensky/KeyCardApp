@@ -8,6 +8,8 @@ public class CardData {
 	public String expire = "";
 	public String type = "";
 	
+	public int rowImage = 0;
+	
 	
 	public CardData(){
 		super();
@@ -22,6 +24,13 @@ public class CardData {
 		super();
 		this.cardName = cardName;
 		this.active = active;
+	}
+	
+	public CardData(String cardName, Boolean active, int rowImage){
+		super();
+		this.cardName = cardName;
+		this.active = active;
+		this.rowImage = rowImage;
 	}
 	
 	public CardData(String cardName, Boolean active, String expire, String type){

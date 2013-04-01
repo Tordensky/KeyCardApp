@@ -9,13 +9,19 @@
     <color name="background">#000000</color>
     <color name="whiteText">#ffffff</color>
     <color name="grassColor">#39b54a</color>
+    <color name="transparent">#ffffffff</color>
 
-    <string name="list_empty">No Cards Found</string>
+    <string name="list_empty">Large Text</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="password">Password</string>
     <string name="username">Username:</string>
     <string name="login">Log in</string>
     <string name="newUser">New User</string>
     <string name="new_card">New Card</string>
+    <string name="title_activity_create_new_card">CreateNewCardActivity</string>
+    <string name="card_name">Card Name</string>
+    <color name="skyblue">#00aeef</color>
+    <string name="valid">Valid: 10days</string>
+    <string name="expires">Set expire date:</string>
 
 </resources>

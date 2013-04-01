@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class CardAdapter extends ArrayAdapter<CardData>{
@@ -40,6 +41,12 @@ public class CardAdapter extends ArrayAdapter<CardData>{
 			
 			cardDataHolder.txtCardName = (TextView)row.findViewById(R.id.cardName);
 			
+			// Active image
+			cardDataHolder.activeImage = (ImageView)row.findViewById(R.id.activeImage);
+			
+			// Left side icon
+			cardDataHolder.iconImage = (ImageView)row.findViewById(R.id.rowIcon);
+			
 			row.setTag(cardDataHolder);
 		
 		}
@@ -53,15 +60,36 @@ public class CardAdapter extends ArrayAdapter<CardData>{
 		cardDataHolder.txtCardName.setText(cardData.cardName);
 		
 		if (cardData.active) {
-			cardDataHolder.txtCardName.setTextSize(30);
+			cardDataHolder.activeImage.setImageResource(R.drawable.background_active);
+		} else {
+			cardDataHolder.activeImage.setImageResource(R.drawable.background_disable);
 		}
 		
+		cardDataHolder.iconImage.setImageResource(getRowImageFromNum(cardData.rowImage));
+		
 		return row;
+	}
+	
+	private int getRowImageFromNum(int imageNum){
+		 switch (imageNum) {
+         case 1:
+        	 return R.drawable.row_icon_buss_big;
+         case 2:
+        	 return R.drawable.row_icon_block;
+         case 3:
+        	 return R.drawable.row_icon_house;
+         case 4:
+        	 return R.drawable.row_icon_factory;
+    	 default:
+    		 return R.drawable.icon_house;
+		 }
 	}
 	
 	static class CardDataHolder
 	{
 		TextView txtCardName;
+		ImageView activeImage;
+		ImageView iconImage;
 	}
 	
 }

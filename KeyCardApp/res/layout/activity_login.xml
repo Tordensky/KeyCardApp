@@ -8,6 +8,7 @@
         android:id="@+id/backgroundImageLogin"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
         android:contentDescription="@string/app_name"
         android:scaleType="fitStart"
         android:src="@drawable/top_screen" />
@@ -23,16 +24,15 @@
         android:layout_marginTop="300dp"
         android:orientation="vertical" >
 
-        <TextView
+        <ImageView
             android:id="@+id/loginTxt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="176dp"
+            android:layout_height="91dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
-            android:text="@string/login"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/whiteText"
-            android:textSize="40sp" />
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/login_sign" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,7 +48,7 @@
                 android:width="200dp" />
 
             <EditText
-                android:id="@+id/editText1"
+                android:id="@+id/new_card_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -93,9 +93,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginRight="2dip"
                 android:layout_weight="1"
-                android:text="@string/login" 
-                android:onClick="loginButtonAction"/>
+                android:background="@drawable/round_button"
+                android:onClick="loginButtonAction"
+                android:padding="5dp"
+                android:text="@string/login"
+                android:textColor="@color/whiteText"
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/newUserButton"
@@ -103,9 +108,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="2dip"
                 android:layout_weight="1"
+                android:background="@drawable/round_button"
                 android:onClick="newButtonAction"
-                android:text="@string/newUser" />
+                android:padding="5dp"
+                android:text="@string/newUser"
+                android:textColor="@color/whiteText"
+                android:textSize="20sp" />
+
         </LinearLayout>
 
     </LinearLayout>

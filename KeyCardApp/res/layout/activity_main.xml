@@ -6,12 +6,46 @@
     android:background="@drawable/background_new"
     tools:context=".MainActivity" >
 
-    <ListView
-        android:id="@android:id/list"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginTop="70dp"
-        tools:listitem="@layout/card_row" />
+        android:layout_height="match_parent"
+        android:gravity="bottom" >
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/row_image"
+            android:layout_marginTop="20dp"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="30dp"
+            android:footerDividersEnabled="true"
+            android:headerDividersEnabled="true"
+            tools:listitem="@layout/card_row" >
+
+        </ListView>
+
+        <ImageView
+            android:id="@+id/row_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="-2dp"
+            android:layout_marginRight="-2dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/footer_straigth" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/footer_img_create_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="false"
+        android:scaleType="fitStart"
+        android:src="@drawable/sky" android:contentDescription="@string/app_name"/>
 
     <TextView
         android:id="@id/android:empty"
@@ -22,26 +56,8 @@
         android:textColor="@color/whiteText"
         android:textSize="@dimen/large_text" />
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:contentDescription="@string/app_name"
-        android:scaleType="fitEnd"
-        android:src="@drawable/footer_new" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:contentDescription="@string/app_name"
-        android:scaleType="fitStart"
-        android:src="@drawable/header_new" />
-
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:orientation="vertical" >
@@ -51,7 +67,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/new_card" />
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/round_button"
+            android:onClick="newCard"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:text="@string/new_card"
+            android:textColor="@color/whiteText"
+            android:textSize="20sp" />
 
     </LinearLayout>
 

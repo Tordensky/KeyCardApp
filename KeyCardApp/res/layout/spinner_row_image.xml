@@ -1,0 +1,20 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/spinner_row"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="top" >
+
+    <ImageView
+        android:id="@+id/spinner_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="372dp"
+        android:layout_marginRight="229dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/row_icon_buss_big" />
+
+</RelativeLayout>
