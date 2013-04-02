@@ -17,6 +17,8 @@ public class MainActivity extends ListActivity {
 	private CardAdapter adapter;
 	private CardData[] values = null;
 
+	private SharedData sharedData = null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -24,9 +26,13 @@ public class MainActivity extends ListActivity {
 
 		//Communication.initCommunication(this, "tom", "tom");
 		
-		//getMyCardsNew();
+		sharedData = new SharedData(this);
+		printMSG("TEST: " + sharedData.getUserName());
+		printMSG("TEST: " + sharedData.getPassword());
 		
-		getCardDataForTesting();
+		getMyCardsNew();
+		
+		//getCardDataForTesting();
 	}
 
 	@Override
@@ -76,6 +82,7 @@ public class MainActivity extends ListActivity {
 		startActivity(intent);
 	}
 	
+	@SuppressWarnings("unused")
 	private void getCardDataForTesting() {
 		values = new CardData[] {
 			new CardData("Busskort", true, 1),
@@ -94,7 +101,6 @@ public class MainActivity extends ListActivity {
 		setListData();
 	}
 
-	@SuppressWarnings("unused")
 	private void getMyCardsNew(){
 		JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
 			
@@ -127,8 +133,8 @@ public class MainActivity extends ListActivity {
 				
 				// Try to login again
 				if (exep.getMessage().equalsIgnoreCase("Unauthorized")){
-					printMSG("Tries to login");
-					Communication.login();
+					printMSG("Error login in");
+					//Communication.login();
 				}
 			}
 		};

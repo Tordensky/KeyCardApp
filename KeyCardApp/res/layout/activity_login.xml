@@ -53,7 +53,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName" >
+                android:inputType="textPersonName"
+                android:textAllCaps="true" >
 
                 <requestFocus />
             </EditText>
@@ -73,12 +74,14 @@
                 android:width="200dp" />
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/login_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:nextFocusForward="@+id/loginButton" />
+
         </LinearLayout>
 
         <LinearLayout

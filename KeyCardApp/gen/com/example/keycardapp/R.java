@@ -60,14 +60,14 @@ public final class R {
         public static final int backgroundImageLogin=0x7f09000b;
         public static final int button1=0x7f090008;
         public static final int cardName=0x7f090004;
-        public static final int datePicker1=0x7f090007;
-        public static final int editText2=0x7f090010;
+        public static final int date_picker=0x7f090007;
         public static final int footer_img_create_screen=0x7f090015;
         public static final int image_spinner=0x7f090002;
         public static final int loginBox=0x7f09000c;
         public static final int loginButton=0x7f090011;
         public static final int loginScreen=0x7f09000a;
         public static final int loginTxt=0x7f09000d;
+        public static final int login_password=0x7f090010;
         public static final int newUserButton=0x7f090012;
         public static final int new_card_name=0x7f090005;
         public static final int new_card_name_row=0x7f090003;
