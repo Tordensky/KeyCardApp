@@ -11,7 +11,7 @@ import com.loopj.android.http.*;
 public class Communication {
 
 	private static final String BASE_URL = "http://129.242.22.146";
-	private static final String LOGIN_URL = "/accounts/login";
+	private static final String LOGIN_URL = "/accounts/login/";
 	
 	private static AsyncHttpClient client = new AsyncHttpClient();
 	private static PersistentCookieStore myCookieStore = null;
@@ -21,22 +21,18 @@ public class Communication {
 	
 	private static Context context = null;
 	
-	
 	public static void initCommunication(Context contx, String usrName, String usrPswrd) {
-		myCookieStore = new PersistentCookieStore(contx);
-		client.setCookieStore(myCookieStore);
-		client.setBasicAuth("test", "test", new AuthScope("http://129.242.22.146", 80, AuthScope.ANY_REALM));
+		if (myCookieStore == null){
+			myCookieStore = new PersistentCookieStore(contx);
+			client.setCookieStore(myCookieStore);
+		}
+		
+		client.setBasicAuth(usrName, usrPswrd, new AuthScope(BASE_URL, 80, AuthScope.ANY_REALM));
 		
 		userName = usrName;
 		password = usrPswrd;
 		
 		context = contx;
-		
-		login();
-	}
-	
-	public static void login() {
-		RequestParams params = new RequestParams();
 		
 		AsyncHttpResponseHandler loginHandler = new AsyncHttpResponseHandler() {
 			@Override
@@ -49,6 +45,30 @@ public class Communication {
 		        printMsg("Succesfull Login");
 		    }
 		};
+		
+		
+		
+		login(loginHandler);
+	}
+	
+	public static void initCommunication(Context contx, String usrName, String usrPswrd, AsyncHttpResponseHandler responseHandler) {
+		if (myCookieStore == null){
+			myCookieStore = new PersistentCookieStore(contx);
+			client.setCookieStore(myCookieStore);
+			
+			client.setBasicAuth(usrName, usrPswrd, new AuthScope(BASE_URL, 80, AuthScope.ANY_REALM));
+		}
+		
+		userName = usrName;
+		password = usrPswrd;
+		
+		context = contx;
+		
+		login(responseHandler);
+	}
+	
+	public static void login(AsyncHttpResponseHandler loginHandler) {
+		RequestParams params = new RequestParams();
 		
 		params.put("user", userName);
 		params.put("password", password);
