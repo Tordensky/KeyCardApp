@@ -52,6 +52,7 @@ public class SimTest extends Activity {
 	    public void onClick(View v) {
 	    	byte[] empty = new byte[] {(byte)0xD0, 0x00, 0x00};
 	     	communication.writeData(seService, empty);
+	     	//Log.d(LOG_TAG ,"data on card " + communication.readData(seService));
 
 	    }
 	  });

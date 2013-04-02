@@ -43,18 +43,22 @@ public class Communication{
 			 //Select Ndef
 			 byte[] NdefSelect = new byte[] {0x00, (byte) 0xA4, 0x00, 0x0C, 0x02, (byte) 0xE1, 0x04};
 			 byte[] respApdu = channel.transmit(NdefSelect);
-			 Log.d(LOG_TAG,"Array in respone for select: " + Arrays.toString(respApdu));
+			 Log.d(LOG_TAG,"Array in respone for select NDEF: " + Arrays.toString(respApdu));
 			 
 			 
 			 //Read the len of data
 			 byte[] readCommand = new byte[]
 		    		  {(byte)0x00, (byte)0xB0,(byte) 0x00, (byte)0x00, (byte)0x02};
-		    
+			 
+			 
 			 respApdu = channel.transmit(readCommand);
-			 int len = (short) ((respApdu[1] << 8) & 0xff00);
-			 len += respApdu[0] & 0xff;
+			 Log.d(LOG_TAG,"Len in data: " + Arrays.toString(respApdu));
+			 
+			 short len = (short) ((respApdu[0] << 8) & 0xff00);
+			 len += respApdu[1] & 0xff;
 			 
 			 Log.d(LOG_TAG,"Len of data: " + len);
+			 readCommand[3] = 0x02;
 			 readCommand[4] = (byte)len;
 			 
 			 //Read the data
@@ -91,10 +95,14 @@ public class Communication{
 		      //Select Ndef
 		      byte[] NdefSelect = new byte[] {0x00, (byte) 0xA4, 0x00, 0x0C, 0x02, (byte) 0xE1, 0x04};
 		      byte[] respApdu = channel.transmit(NdefSelect);
+		      
+		     
 		      Log.d(LOG_TAG,"Array in respone for select: " + Arrays.toString(respApdu));
 		      
 		      byte len1 = (byte) (data.length & 0xff00);
 		      byte len2 = (byte) (data.length & 0xff);
+		     
+		      Log.d(LOG_TAG,"length " + len1 + " " + len2);
 		      
 		      byte[] writeCommand = new byte[]
 		    		  {(byte)0x00, (byte)0xD6,(byte) 0x00, (byte)0x00, (byte)(data.length + 2), len1, len2};
