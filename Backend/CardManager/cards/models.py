@@ -4,8 +4,9 @@ from django.contrib.auth.models import User
 class Card(models.Model):
     name = models.CharField(max_length = 25)
     value = models.CharField(max_length=200)
-    type = models.CharField(max_length=50)
+    cardIcon = models.IntegerField(default=0)
     users = models.ManyToManyField(User, through='CardUser')
+    
     
     def __unicode__(self):
         return self.name

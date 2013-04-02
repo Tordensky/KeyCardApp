@@ -32,7 +32,7 @@ def index(request):
     for card in cards:
         cardUserObjects = card.carduser_set.all()
         for cardUserObject in cardUserObjects:
-            cardInfoDict = {'name':card.name, 'value': card.value, 'type': card.type, 'expiry_date': cardUserObject.expiry_date.isoformat() , 'role': cardUserObject.role}
+            cardInfoDict = {'id':card.pk, 'name':card.name, 'value': card.value, 'cardIcon': card.cardIcon, 'expiry_date': cardUserObject.expiry_date.isoformat() , 'role': cardUserObject.role}
         cardList.append(cardInfoDict)
     
         
@@ -56,6 +56,17 @@ def getCard(request, card_id):
     
     
     return HttpResponse(c)
+
+
+#
+#def createCard(request):
+#    print request.user.id,  "is trying to Create card"
+#    
+#    if request.method == 'POST':
+        
+        
+        
+
 
 def results(request, card_id):
     return HttpResponse("You're looking at the results of card %s." % card_id)
