@@ -82,6 +82,7 @@ public class MainActivity extends ListActivity {
 		startActivity(intent);
 	}
 	
+	@SuppressWarnings("unused")
 	private void getCardDataForTesting() {
 		values = new CardData[] {
 			new CardData("Busskort", true, 1),
@@ -100,7 +101,6 @@ public class MainActivity extends ListActivity {
 		setListData();
 	}
 
-	@SuppressWarnings("unused")
 	private void getMyCardsNew(){
 		JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
 			

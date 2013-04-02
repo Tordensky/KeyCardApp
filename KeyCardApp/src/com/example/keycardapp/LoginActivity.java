@@ -24,7 +24,7 @@ public class LoginActivity extends Activity {
 		
 		setContentView(R.layout.activity_login);
 		
-		userNameField = (EditText)findViewById(R.id.login_username);
+		userNameField = (EditText)findViewById(R.id.new_card_name);
 		passwordField = (EditText)findViewById(R.id.login_password);
 		
 		sharedData = new SharedData(this);

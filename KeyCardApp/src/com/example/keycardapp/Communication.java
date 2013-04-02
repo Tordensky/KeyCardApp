@@ -1,7 +1,13 @@
 package com.example.keycardapp;
 
+import java.io.UnsupportedEncodingException;
+
 import org.apache.http.auth.AuthScope;
 import org.apache.http.cookie.Cookie;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.widget.Toast;
@@ -81,7 +87,21 @@ public class Communication {
 	}
 	
 	public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-		client.get(getAbsoluteUrl(url), params, responseHandler);
+		client.post(getAbsoluteUrl(url), params, responseHandler);
+	}
+	
+	public static void postJson(String url, JSONObject object, AsyncHttpResponseHandler responseHandler) {
+		// params is a JSONObject
+		StringEntity se = null;
+		try {
+		  se = new StringEntity(object.toString());
+		} catch (UnsupportedEncodingException e) {
+		  e.printStackTrace();
+		  return;
+		}
+		se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+
+		client.post(null, getAbsoluteUrl(url), se, "application/json", responseHandler);
 	}
 	
 	private static String getAbsoluteUrl(String relativeUrl) {
