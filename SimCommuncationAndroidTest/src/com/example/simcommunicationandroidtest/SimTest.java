@@ -19,10 +19,11 @@ import android.widget.LinearLayout;
 public class SimTest extends Activity {
 	private SEService seService; 
 	private Communication communication;
-	
+	  
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-	  final String LOG_TAG = "HelloSmartcard";
+		
+      final String LOG_TAG = "HelloSmartcard";
 	  communication = new Communication();
 	  super.onCreate(savedInstanceState);
 	  
@@ -46,14 +47,13 @@ public class SimTest extends Activity {
 	  button.setLayoutParams(new LayoutParams(
 	          LayoutParams.WRAP_CONTENT,
 	          LayoutParams.WRAP_CONTENT));
-
 	  button.setText("Click Me");
 	  button.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
 	    	byte[] empty = new byte[] {(byte)0xD0, 0x00, 0x00};
-	     	communication.writeData(seService, empty);
+	     	//communication.writeData(seService, empty);
 	     	//Log.d(LOG_TAG ,"data on card " + communication.readData(seService));
-
+	    	
 	    }
 	  });
 
