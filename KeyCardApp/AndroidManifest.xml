@@ -33,6 +33,10 @@
             android:name="com.example.keycardapp.CreateNewCardActivity"
             android:label="@string/title_activity_create_new_card" >
         </activity>
+        <activity
+            android:name="com.example.keycardapp.CreateNewUserActivity"
+            android:label="@string/title_activity_create_new_user" >
+        </activity>
     </application>
 
 </manifest>

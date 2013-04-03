@@ -8,6 +8,9 @@ public class CardData {
 	public String expire = "";
 	public String type = "";
 	
+	public String data = "";
+	
+	public int id;
 	public int rowImage = 0;
 	
 	
@@ -33,11 +36,22 @@ public class CardData {
 		this.rowImage = rowImage;
 	}
 	
-	public CardData(String cardName, Boolean active, String expire, String type){
+	public CardData(String cardName, Boolean active, String expire, String type, int rowImage){
 		super();
 		this.cardName = cardName;
 		this.active = active;
 		this.expire = expire;
 		this.type = type;
+		this.rowImage= rowImage;
+	}
+	
+	public CardData(int id, String cardName,  String expire, String data, int rowImage){
+		super();
+		
+		this.id = id;
+		this.cardName = cardName;
+		this.expire = expire;
+		this.data = data;
+		this.rowImage= rowImage;
 	}
 }

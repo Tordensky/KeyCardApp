@@ -4,13 +4,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.loopj.android.http.*;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class MainActivity extends ListActivity {
 
@@ -19,20 +24,68 @@ public class MainActivity extends ListActivity {
 
 	private SharedData sharedData = null;
 	
+	private static final int DELETE = Menu.FIRST;
+	
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		//Communication.initCommunication(this, "tom", "tom");
 		
 		sharedData = new SharedData(this);
-		printMSG("TEST: " + sharedData.getUserName());
-		printMSG("TEST: " + sharedData.getPassword());
 		
-		getMyCardsNew();
+		//getMyCards();
 		
 		//getCardDataForTesting();
+		
+		registerForContextMenu(getListView());
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		getMyCards();
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		menu.add(0, DELETE, 0, "Delete Card");		
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+    	AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+    	
+    	
+    	switch (item.getItemId()){
+		case DELETE:
+			CardAdapter adapter = (CardAdapter)this.getListAdapter();
+			
+			CardData rowData = (CardData)adapter.getItem(info.position);
+			deleteCard(rowData.id);
+			printMSG("Should delete card: " + rowData.cardName);
+			return true;
+    	}
+    	return super.onContextItemSelected(item);
+	}
+
+
+	private void deleteCard(int cardID) {
+		Communication.delete("/cards/"+cardID, new AsyncHttpResponseHandler() {
+			@Override
+			public void onFailure(Throwable exep, String msg) {
+				printMSG("ERROR: Could not delete Card: " + msg + " Exep: " + exep.getMessage());
+			}
+			
+			@Override
+		    public void onSuccess(String response) {
+		        printMSG("Deleted + " + response);
+		        getMyCards();
+		    }
+		});
 	}
 
 	@Override
@@ -48,14 +101,12 @@ public class MainActivity extends ListActivity {
 		super.onListItemClick(l, v, position, id);
 		
 		CardAdapter adapter = (CardAdapter)l.getAdapter();
+		
 		CardData rowData = (CardData)adapter.getItem(position);
 		
 		changeState(rowData);
 		
 		adapter.notifyDataSetChanged();
-		
-		//Toast.makeText(this, "Pressed: " + id + "Active: " + rowData.active, Toast.LENGTH_SHORT).show();
-		
 	}
 	
 	private void setListData(){
@@ -88,20 +139,11 @@ public class MainActivity extends ListActivity {
 			new CardData("Busskort", true, 1),
 			new CardData("Busskort", true, 2),
 			new CardData("Busskort", true, 3),
-			new CardData("Busskort", true, 4),
-			new CardData("Busskort", true, 5),
-			new CardData("Busskort", true),
-			new CardData("Busskort", true)
-			//new CardData("Jobbkort", false, 1),
-			//new CardData("Studentkort", false, 1)
-			//new CardData("Expertkort", false, 4),
-			//new CardData("Busskort", true)
 		};
-		
 		setListData();
 	}
 
-	private void getMyCardsNew(){
+	private void getMyCards(){
 		JsonHttpResponseHandler handler = new JsonHttpResponseHandler() {
 			
 			@Override
@@ -116,7 +158,13 @@ public class MainActivity extends ListActivity {
 					for (int i = 0; i < cards.length(); i++) {
 						JSONObject card = (JSONObject) cards.get(i);
 						
-						values[i] = new CardData(card.getString("name"));
+						values[i] = new CardData(
+								card.getInt("id"), 
+								card.getString("name"),
+								card.getString("exp_date"),
+								card.getString("value"),
+								card.getInt("cardIcon")
+								);
 					}
 					
 					setListData();
@@ -138,7 +186,6 @@ public class MainActivity extends ListActivity {
 				}
 			}
 		};
-
 		Communication.get("/cards/", new RequestParams(), handler);
 	}
 

@@ -90,6 +90,10 @@ public class Communication {
 		client.post(getAbsoluteUrl(url), params, responseHandler);
 	}
 	
+	public static void delete(String url, AsyncHttpResponseHandler responseHandler) {
+		client.delete(getAbsoluteUrl(url), responseHandler);
+	}
+	
 	public static void postJson(String url, JSONObject object, AsyncHttpResponseHandler responseHandler) {
 		// params is a JSONObject
 		StringEntity se = null;
@@ -102,6 +106,7 @@ public class Communication {
 		se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
 
 		client.post(null, getAbsoluteUrl(url), se, "application/json", responseHandler);
+		
 	}
 	
 	private static String getAbsoluteUrl(String relativeUrl) {

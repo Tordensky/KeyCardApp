@@ -90,6 +90,7 @@ public class CardAdapter extends ArrayAdapter<CardData>{
 		TextView txtCardName;
 		ImageView activeImage;
 		ImageView iconImage;
+		
 	}
 	
 }

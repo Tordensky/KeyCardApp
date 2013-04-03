@@ -84,7 +84,8 @@ public class LoginActivity extends Activity {
 	}
 	
 	public void newButtonAction(View v) {
-		Toast.makeText(this, "NOTE: Not implemented", Toast.LENGTH_LONG).show();
+		Intent intent = new Intent(this, CreateNewUserActivity.class);
+		startActivity(intent);
 	}
 
 	@Override

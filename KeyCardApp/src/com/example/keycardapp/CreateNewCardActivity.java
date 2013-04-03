@@ -1,6 +1,11 @@
 package com.example.keycardapp;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
@@ -29,7 +34,9 @@ public class CreateNewCardActivity extends Activity {
 	private String cardName  = null;
 	
 	private DatePicker datePicker;
-	private GregorianCalendar calender;
+	private Calendar calender;
+	private Date date;
+	private SimpleDateFormat dateFormat;
 	
 	private int day;
 	private int month;
@@ -64,7 +71,7 @@ public class CreateNewCardActivity extends Activity {
 		spinner.setAdapter(adapter);
 		
 		datePicker = (DatePicker)findViewById(R.id.date_picker);
-		calender = new GregorianCalendar();
+		calender = Calendar.getInstance();
 		
 		cardNameField = (EditText)findViewById(R.id.new_card_name);
 	}
@@ -81,26 +88,31 @@ public class CreateNewCardActivity extends Activity {
 			printMsg("Note, you must scann a nfc card before you can save it");
 		} 
 		else {
+			// Gets Card Name TODO check length
+			cardName = cardNameField.getText().toString();
+			
+			// 
+			
 			// Gets expire date
 			day = datePicker.getDayOfMonth();
 			month = datePicker.getMonth();
 			year = datePicker.getYear();
 			
 			calender.set(year, month, day);
+			date = calender.getTime();
+			dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
+			String dateString = dateFormat.format(date);
 			
-			// Gets card name
-			cardName = cardNameField.getText().toString();
 			
-			
-			
-			printMsg("Tryes to create new card: " + cardName + " Expire " + calender.getTime().toString());
+			printMsg("Tryes to create new card: " + cardName + " Expire " + dateString);
 		
+			
 			
 			jsonObject = new JSONObject();
 			try {
 				jsonObject.put("name", cardName);
 				jsonObject.put("cardIcon", 1);
-				jsonObject.put("exp_date", calender.getTime().toString());
+				jsonObject.put("exp_date", dateString);
 				jsonObject.put("value", "test card data value");
 				
 			} catch (JSONException e) {
@@ -121,6 +133,7 @@ public class CreateNewCardActivity extends Activity {
 			@Override
 		    public void onSuccess(String response) {
 		        printMsg("Created card + " + response);
+		        finish();
 		    }
 		});
 	}
@@ -128,6 +141,7 @@ public class CreateNewCardActivity extends Activity {
 	public void readCard(View v) {
 		// TODO add function for reading in card data into byte[] cardData, if success set hasScannedCard to true
 		hasScannedCard = true;
+		
 		printMsg("Tryes to read new card");
 	}
 	
