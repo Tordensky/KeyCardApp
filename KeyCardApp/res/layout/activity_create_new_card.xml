@@ -1,124 +1,130 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/create_scrollview"
-    android:layout_width="fill_parent"
-    android:layout_height="match_parent" >
+    android:id="@+id/createCard"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient"
+    android:orientation="vertical" >
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_new" >
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="-50dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitStart"
+        android:src="@drawable/sky" />
+
+    <TextView
+        android:id="@+id/setRowIconText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/imageView1"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/setLayout"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Spinner
+        android:id="@+id/image_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/layoutCreateNewCard"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/setRowIconText"
+        android:layout_weight="1"
+        android:background="@android:color/transparent"
+        tools:listitem="@layout/card_row" />
+
+    <LinearLayout
+        android:id="@+id/layoutCreateNewCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="#009245"
+        android:orientation="vertical"
+        android:paddingBottom="30dp" >
 
         <ImageView
-            android:id="@+id/sky_create_new"
-            android:layout_width="match_parent"
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="-30dp"
+            android:adjustViewBounds="true"
             android:scaleType="fitStart"
-            android:src="@drawable/sky" />
-
-        <ImageView
-            android:id="@+id/row_panel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/image_spinner"
-            android:layout_marginBottom="-20dp"
-            android:layout_marginTop="-20dp"
-            android:adjustViewBounds="false"
-            android:contentDescription="@string/hello_world"
-            android:cropToPadding="true"
-            android:scaleType="fitEnd"
             android:src="@drawable/footer_straigth" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/new_card_name_row"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/row_panel"
-            android:background="#009245"
-            android:orientation="vertical"
-            android:paddingBottom="30dp" >
-
-            <LinearLayout
-                android:id="@+id/new_card_name_row"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp" >
-
-                <TextView
-                    android:id="@+id/cardName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="10dp"
-                    android:text="@string/card_name"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-
-                <EditText
-                    android:id="@+id/new_card_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textPersonName" >
-
-                    <requestFocus />
-                </EditText>
-            </LinearLayout>
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" >
 
             <TextView
-                android:id="@+id/textView1"
+                android:id="@+id/cardName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:text="@string/expires"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="15sp" />
-
-            <DatePicker
-                android:id="@+id/date_picker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:id="@+id/new_user_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/round_button"
-                android:onClick="readCard"
-                android:padding="10dp"
-                android:text="Scann Card"
-                android:textColor="@color/whiteText"
-                android:textSize="20sp" />
-
-            <Button
-                android:id="@+id/Button01"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/round_button"
-                android:onClick="saveCard"
-                android:padding="10dp"
-                android:text="Save"
-                android:textColor="@color/whiteText"
-                android:textSize="20sp" />
+                android:text="@string/card_name"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <EditText
+                android:id="@+id/new_card_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName" >
+
+                <requestFocus />
+            </EditText>
         </LinearLayout>
 
-        <Spinner
-            android:id="@+id/image_spinner"
+        <TextView
+            android:id="@+id/expire_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="false"
-            android:layout_below="@id/sky_create_new"
-            android:background="@android:color/transparent"
-            tools:listitem="@layout/card_row" />
-    </RelativeLayout>
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="@string/expires"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="15sp" />
 
-</ScrollView>
+        <DatePicker
+            android:id="@+id/date_picker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/new_user_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/round_button"
+            android:onClick="readCard"
+            android:padding="10dp"
+            android:text="Scann Card"
+            android:textColor="@color/whiteText"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/Button01"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/round_button"
+            android:onClick="saveCard"
+            android:padding="10dp"
+            android:text="Save"
+            android:textColor="@color/whiteText"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+</RelativeLayout>

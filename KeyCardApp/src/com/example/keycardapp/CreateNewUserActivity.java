@@ -20,12 +20,18 @@ public class CreateNewUserActivity extends Activity {
 	
 	private JSONObject jsonObject = null;
 	
+	private SharedData sharedData = null;
+	
+	private String userName = null;
+	private String password = null;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_new_user);
 		
+		sharedData = new SharedData(this);
 		
 		userNameField = (EditText)findViewById(R.id.new_user_name);
 		passwordField = (EditText)findViewById(R.id.new_user_password);
@@ -34,13 +40,11 @@ public class CreateNewUserActivity extends Activity {
 	
 	// NOTE Called from XML layout file
 	public void createNewUser(View v) {
-		String userName = userNameField.getText().toString();
-		String password = passwordField.getText().toString();
+		userName = userNameField.getText().toString();
+		password = passwordField.getText().toString();
 		String confirmPassword = passwordConfirmField.getText().toString();
 		
 		if (password.equalsIgnoreCase(confirmPassword)) {
-			printMsg("Password ok");
-			
 			jsonObject = new JSONObject();
 			try {
 				jsonObject.put("username", userName);
@@ -66,7 +70,8 @@ public class CreateNewUserActivity extends Activity {
 			
 			@Override
 		    public void onSuccess(String response) {
-		        printMsg("Created card + " + response);
+		        printMsg("Account creates succesfully");
+		        sharedData.setCredentials(userName, password);
 		        finish();
 		    }
 		});

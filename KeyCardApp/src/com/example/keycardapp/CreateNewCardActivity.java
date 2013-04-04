@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -47,17 +48,13 @@ public class CreateNewCardActivity extends Activity {
 	private JSONObject jsonObject = null;
 	
 	@SuppressWarnings("unused")
-	private byte[] cardData = null;
+	private String cardData = null;
 	
 	
 	private Integer[] data = {
 			R.drawable.row_icon_block,
 			R.drawable.row_icon_buss_big,
-			R.drawable.row_icon_factory,
-			R.drawable.row_icon_block,
-			R.drawable.row_icon_buss_big,
-			R.drawable.row_icon_factory,
-			R.drawable.row_icon_house
+			R.drawable.row_icon_factory
 	};
 	
 	@Override
@@ -85,7 +82,7 @@ public class CreateNewCardActivity extends Activity {
 	
 	public void saveCard(View v) {
 		if (!hasScannedCard) {
-			printMsg("Note, you must scann a nfc card before you can save it");
+			printMsg("Note, you must scann a NFC card before you can save it");
 		} 
 		else {
 			// Gets Card Name TODO check length
@@ -102,12 +99,7 @@ public class CreateNewCardActivity extends Activity {
 			date = calender.getTime();
 			dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
 			String dateString = dateFormat.format(date);
-			
-			
-			printMsg("Tryes to create new card: " + cardName + " Expire " + dateString);
-		
-			
-			
+						
 			jsonObject = new JSONObject();
 			try {
 				jsonObject.put("name", cardName);
@@ -132,15 +124,21 @@ public class CreateNewCardActivity extends Activity {
 			
 			@Override
 		    public void onSuccess(String response) {
-		        printMsg("Created card + " + response);
+		        printMsg("Created card succesfully");
 		        finish();
 		    }
 		});
 	}
 	
+	// TODO This is the method to read data from card
 	public void readCard(View v) {
-		// TODO add function for reading in card data into byte[] cardData, if success set hasScannedCard to true
+		// TODO ALEX! add function / action for reading in card data into byte[] cardData, if success set hasScannedCard to true
+		
+		// TODO Set this to TRUE when reading has completed successfully
 		hasScannedCard = true;
+		
+		// TODO SET DATA read from card here!
+		cardData = "";
 		
 		printMsg("Tryes to read new card");
 	}
@@ -188,6 +186,12 @@ public class CreateNewCardActivity extends Activity {
 					row = inflater.inflate(layoutResourceId, parent, false);
 					
 					image = (ImageView)row.findViewById(R.id.rowIcon);
+					
+					TextView name = (TextView)row.findViewById(R.id.cardName);
+					name.setText("");
+					
+					TextView expire = (TextView)row.findViewById(R.id.expire_date);
+					expire.setText("");
 					
 					row.setTag(image);
 				}

@@ -46,4 +46,10 @@ public class SharedData {
 		return _sharedPrefs.getBoolean("hasCreds", false);
 	}
 	
+	public void clearCredentialsData() {
+		setCredentials("", "");
+		_prefsEditor.putBoolean("hasCreds", false);
+		_prefsEditor.commit();
+	}
+	
 }

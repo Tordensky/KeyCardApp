@@ -25,6 +25,8 @@ public class Communication {
 	private static String userName = "";
 	private static String password = "";
 	
+	private static SharedData sharedData = null;
+	
 	private static Context context = null;
 	
 	public static void initCommunication(Context contx, String usrName, String usrPswrd) {
@@ -79,6 +81,8 @@ public class Communication {
 		params.put("user", userName);
 		params.put("password", password);
 		
+		sharedData = new SharedData(context);
+		
 		client.get(getAbsoluteUrl(LOGIN_URL), params, loginHandler);
 	}
 	
@@ -130,6 +134,15 @@ public class Communication {
 		for (Cookie cookie : myCookieStore.getCookies()) {
 			printMsg("Name: "+ cookie.getName() + "DOMAIN: " + cookie.getDomain() + " PATH: " + cookie.getPath() + " EXP: " + cookie.getExpiryDate());
 		}
+	}
+	
+	public static void logout(AsyncHttpResponseHandler responseHandler) {
+		client.get(getAbsoluteUrl("/accounts/logout"), responseHandler);
+		
+		myCookieStore.clear();
+		sharedData.clearCredentialsData();
+		password = "";
+		userName = "";
 	}
 		
 }

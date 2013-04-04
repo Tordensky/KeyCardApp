@@ -58,11 +58,12 @@
 	                android:layout_width="match_parent"
 	                android:layout_height="wrap_content"
 	                android:layout_weight="1"
-	                android:ems="10"
 	                android:inputType="textPersonName"
-	                android:textAllCaps="true" >
-	
+	                android:singleLine="true" >
+
 	                <requestFocus />
+	                <requestFocus />
+
 	            </EditText>
 	        </LinearLayout>
 	
@@ -86,7 +87,8 @@
 	                android:layout_weight="1"
 	                android:ems="10"
 	                android:inputType="textPassword"
-	                android:nextFocusForward="@+id/loginButton" />
+	                android:nextFocusForward="@+id/loginButton"
+	                android:singleLine="true" />
 	
 	        </LinearLayout>
 	

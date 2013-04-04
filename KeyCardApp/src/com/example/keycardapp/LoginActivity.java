@@ -70,7 +70,7 @@ public class LoginActivity extends Activity {
 			
 			@Override
 		    public void onSuccess(String response) {
-		        printMsg("Succesfull Login");
+		        printMsg("Succesfully logged in");
 		        sharedData.setCredentials(userName, password);
 		        startMainActivity();
 		    }

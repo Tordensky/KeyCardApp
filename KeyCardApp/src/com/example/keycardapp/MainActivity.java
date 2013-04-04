@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
@@ -24,7 +25,12 @@ public class MainActivity extends ListActivity {
 
 	private SharedData sharedData = null;
 	
+	private TextView backgroundText = null;
+	
 	private static final int DELETE = Menu.FIRST;
+	
+	private static final int LOGOUT = Menu.FIRST + 1;
+	private static final int REFRESH = Menu.FIRST + 2; 
 	
 	
 	
@@ -38,6 +44,8 @@ public class MainActivity extends ListActivity {
 		//getMyCards();
 		
 		//getCardDataForTesting();
+		
+		backgroundText = (TextView)findViewById(android.R.id.empty);
 		
 		registerForContextMenu(getListView());
 	}
@@ -66,7 +74,6 @@ public class MainActivity extends ListActivity {
 			
 			CardData rowData = (CardData)adapter.getItem(info.position);
 			deleteCard(rowData.id);
-			printMSG("Should delete card: " + rowData.cardName);
 			return true;
     	}
     	return super.onContextItemSelected(item);
@@ -77,12 +84,12 @@ public class MainActivity extends ListActivity {
 		Communication.delete("/cards/"+cardID, new AsyncHttpResponseHandler() {
 			@Override
 			public void onFailure(Throwable exep, String msg) {
-				printMSG("ERROR: Could not delete Card: " + msg + " Exep: " + exep.getMessage());
+				printMSG("SERVER ERROR: Could not delete Card: " + msg + " Exep: " + exep.getMessage());
 			}
 			
 			@Override
 		    public void onSuccess(String response) {
-		        printMSG("Deleted + " + response);
+				printMSG("Deleted card");
 		        getMyCards();
 		    }
 		});
@@ -90,11 +97,52 @@ public class MainActivity extends ListActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
+		menu.add(0, LOGOUT, 0, "Log out");
+		menu.add(0, REFRESH, 0, "Refresh");
+		
 		getMenuInflater().inflate(R.menu.main, menu);
 
 		return true;
 	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId())
+	    {
+	    case LOGOUT:
+	        logout();
+	        break;
+	    case REFRESH:
+	    	getMyCards();
+	        break;
+	    default:
+	    	printMSG("NOT IMPLEMENTED");
+	        break;
+	    }
+	    return true;
+	}
+	
+	private void logout() {
+		Communication.logout(new AsyncHttpResponseHandler() {
+			@Override
+			public void onFailure(Throwable exep, String msg) {
+				printMSG("ERROR: Could not logout: " + msg + " Exep: " + exep.getMessage());
+			}
+			
+			@Override
+		    public void onSuccess(String response) {
+		        printMSG("Loged out from server");
+		        gotoLogin();
+		    }
+		});
+	}
+	
+	private void gotoLogin(){
+		Intent intent = new Intent(this, LoginActivity.class);
+		startActivity(intent);
+		finish();
+	}
+	
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -148,19 +196,27 @@ public class MainActivity extends ListActivity {
 			
 			@Override
 			public void onSuccess(JSONObject cardData) {
-				printMSG("GOT SUCCES JSON");
 				try {
 					JSONArray cards = cardData.getJSONArray("cards");
 					
-					values = new CardData[cards.length()];
+					int numberOfCardsFromServer = cards.length();
+					
+					if (numberOfCardsFromServer == 0) {
+						backgroundText.setText("No cards, press \"new card\" to add a new card");
+					}
+					
+					values = new CardData[numberOfCardsFromServer];
+					
+					
 					
 					// Traverse Cards
 					for (int i = 0; i < cards.length(); i++) {
 						JSONObject card = (JSONObject) cards.get(i);
 						
 						values[i] = new CardData(
-								card.getInt("id"), 
-								card.getString("name"),
+								card.getInt("id"),
+								card.getString("name").substring(0, 1).toUpperCase() +
+								card.getString("name").substring(1).toLowerCase(),
 								card.getString("exp_date"),
 								card.getString("value"),
 								card.getInt("cardIcon")
@@ -168,11 +224,14 @@ public class MainActivity extends ListActivity {
 					}
 					
 					setListData();
+					
+					
 				
 				} catch (JSONException e) {
 					e.printStackTrace();
-					printMSG("PARSE ERROR");
+					return;
 				}
+				printMSG("Cards synced with server");
 			}
 
 			@Override
@@ -181,8 +240,11 @@ public class MainActivity extends ListActivity {
 				
 				// Try to login again
 				if (exep.getMessage().equalsIgnoreCase("Unauthorized")){
-					printMSG("Error login in");
-					//Communication.login();
+					printMSG("Error, not loged in");
+					logout(); 
+					
+				} else {
+					backgroundText.setText("Error, server unavailable");
 				}
 			}
 		};
