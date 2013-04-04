@@ -22,8 +22,8 @@
         </activity>
         <activity
             android:name="com.example.keycardapp.LoginActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:label="@string/title_activity_login" >
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,13 +32,17 @@
         </activity>
         <activity
             android:name="com.example.keycardapp.CreateNewCardActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:label="@string/title_activity_create_new_card" >
+            android:label="@string/title_activity_create_new_card"
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name="com.example.keycardapp.CreateNewUserActivity"
-            android:windowSoftInputMode="stateHidden"
-            android:label="@string/title_activity_create_new_user" >
+            android:label="@string/title_activity_create_new_user"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
+            android:name="com.example.keycardapp.ShareCardActivity"
+            android:label="@string/title_activity_share_card" >
         </activity>
     </application>
 

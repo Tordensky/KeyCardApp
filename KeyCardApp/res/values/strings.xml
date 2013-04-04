@@ -29,5 +29,8 @@
     <string name="confirm_password">Confirm</string>
     <string name="sign_up">Sign up</string>
     <string name="setLayout">Set row icon:</string>
+    <string name="title_activity_share_card">ShareCardActivity</string>
+    <string name="friendName">"Share to user: "</string>
+    <string name="share">Share card</string>
 
 </resources>

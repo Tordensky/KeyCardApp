@@ -28,6 +28,7 @@ public class MainActivity extends ListActivity {
 	private TextView backgroundText = null;
 	
 	private static final int DELETE = Menu.FIRST;
+	private static final int SHARE = Menu.FIRST + 3;
 	
 	private static final int LOGOUT = Menu.FIRST + 1;
 	private static final int REFRESH = Menu.FIRST + 2; 
@@ -60,22 +61,32 @@ public class MainActivity extends ListActivity {
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
-		menu.add(0, DELETE, 0, "Delete Card");		
+		
+		menu.add(0, SHARE, 0, "Share Card");
+		menu.add(0, DELETE, 0, "Delete Card");	
 	}
 	
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
     	AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
     	
+    	CardAdapter adapter = (CardAdapter)this.getListAdapter();
+		CardData rowData = (CardData)adapter.getItem(info.position);
+		
     	
     	switch (item.getItemId()){
 		case DELETE:
-			CardAdapter adapter = (CardAdapter)this.getListAdapter();
-			
-			CardData rowData = (CardData)adapter.getItem(info.position);
 			deleteCard(rowData.id);
 			return true;
+			
+		case SHARE:
+			printMSG("SHARE CARD");
+			Intent intent = new Intent(this, ShareCardActivity.class);
+			intent.putExtra("cardID", rowData.id);
+			intent.putExtra("cardName", rowData.cardName);
+			startActivity(intent);
     	}
+    		
     	return super.onContextItemSelected(item);
 	}
 
@@ -152,7 +163,7 @@ public class MainActivity extends ListActivity {
 		
 		CardData rowData = (CardData)adapter.getItem(position);
 		
-		changeState(rowData);
+		changeState(rowData, adapter);
 		
 		adapter.notifyDataSetChanged();
 	}
@@ -163,15 +174,25 @@ public class MainActivity extends ListActivity {
 		setListAdapter(adapter);
 	}
 	
-	private void changeState(CardData rowData) {
+	private void changeState(CardData rowData, CardAdapter adapter) {
 		if (rowData.active) {
 			rowData.active = false;
 			
-			// TODO Add code for deactivating card here
+			// TODO Add code for deactivating this card on UICC card (set data to empty string?)
+			
 		} else {
+			setAllActiveToFalse(adapter);
 			rowData.active = true;
 			
-			// TODO Add code for Activating card here
+			// TODO Add code for Activating card on UICC card here
+			String dataToPutOnCard = rowData.data;
+			
+		}
+	}
+	
+	private void setAllActiveToFalse(CardAdapter adapter) {
+		for (int i = 0; i < adapter.getCount(); i++) {
+			adapter.getItem(i).active = false;
 		}
 	}
 	
@@ -202,12 +223,10 @@ public class MainActivity extends ListActivity {
 					int numberOfCardsFromServer = cards.length();
 					
 					if (numberOfCardsFromServer == 0) {
-						backgroundText.setText("No cards, press \"new card\" to add a new card");
+						backgroundText.setText("No cards, press \n\"new card\"\n to add a new card");
 					}
 					
 					values = new CardData[numberOfCardsFromServer];
-					
-					
 					
 					// Traverse Cards
 					for (int i = 0; i < cards.length(); i++) {
@@ -225,8 +244,6 @@ public class MainActivity extends ListActivity {
 					
 					setListData();
 					
-					
-				
 				} catch (JSONException e) {
 					e.printStackTrace();
 					return;
