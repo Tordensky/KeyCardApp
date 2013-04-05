@@ -17,6 +17,7 @@ class CardUser(models.Model):
     card = models.ForeignKey(Card)
     role = models.IntegerField(default=0)
     expiry_date = models.DateTimeField()
+    expired = models.BooleanField(default=False)
     
     
     
