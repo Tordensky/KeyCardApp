@@ -1,14 +1,13 @@
+
 from django.http import HttpResponse
 from cards.models import Card, CardUser
 from django.contrib.auth.models import User
 import json
 
-from django.contrib.auth.decorators import login_required
 
-#@login_required
 def index(request):
     print "GETTING CARDS"
-    print request
+    #print request
     if request.user.is_authenticated():
         if request.method == 'GET':
             cards = ""
@@ -33,15 +32,76 @@ def index(request):
 
     for card in cards:
         cardUserObjects = card.carduser_set.all()
+        
         for cardUserObject in cardUserObjects:
-            cardInfoDict = {'id':card.pk, 'name':card.name, 'value': card.value, 'cardIcon': card.cardIcon, 'exp_date': cardUserObject.expiry_date.isoformat() , 'role': cardUserObject.role}
-            cardList.append(cardInfoDict)
+            if cardUserObject.user == request.user: 
+                cardInfoDict = {'id':card.pk, 'name':card.name, 'value': card.value, 'cardIcon': card.cardIcon, 'exp_date': cardUserObject.expiry_date.isoformat() , 'role': cardUserObject.role, 'expired':cardUserObject.expired}
+                cardList.append(cardInfoDict)
     
         
     returnMsg = {'cards': cardList}
     returnMsg = json.dumps(returnMsg)
     print returnMsg
     return HttpResponse(returnMsg, content_type='application/json')
+
+
+
+def shareCard(request, card_id):
+    print json.loads(request.body)
+    if request.user.is_authenticated():
+        if request.method == 'POST':
+            cards = Card.objects.filter(users__id = request.user.id)
+            cardToShare = cards.filter(pk = card_id)
+            
+            if cardToShare.exists():
+                dicts = json.loads(request.body)
+                name = dicts['username']
+                exp_date = dicts['exp_date']
+                
+                # user does not exist, cannot share with non existing user
+                try:
+                    userToShareKey = User.objects.get(username = name)
+                except Exception as e:
+                    return HttpResponse(status=404)
+
+                # user is self, cannot share with yourself
+                if request.user.username == name:
+                    print "YOU CANNOT SHARE TO YOURSELF"
+                    return HttpResponse(status=403)
+                print "eeee"
+                existingCardUser = Card.objects.filter(users__id = userToShareKey.pk, pk = card_id)
+                for card in existingCardUser:
+                    print card
+                   
+                print "asdasd"
+#                existingCardUser.filter(pk = card_id)
+                print card_id
+      
+                
+                for card in existingCardUser:
+                    print card.pk
+                    print card
+                if existingCardUser.exists():
+                    print "HE ALREADY HAS THIS CARD"
+                    return HttpResponse(status=403)
+                print "HE DIDNT HAVE THE CARD"
+                for card in cardToShare:
+                    print "hei"
+                    cardUserObjects = card.carduser_set.all()
+                    for cardUserObject in cardUserObjects:
+                        role = cardUserObject.role
+                        if role == 0:
+                            try:
+                                cardUser = CardUser(user = userToShareKey, card = card, expiry_date = exp_date, role=1)
+                                print "test2"
+                                cardUser.save()
+                            except Exception as e:
+                                print e
+                                return HttpResponse(status=500)
+                        else:
+                            continue
+            return HttpResponse(status=200)
+
 
 #@login_required
 def getCard(request, card_id):
@@ -107,9 +167,9 @@ def createCard(request):
             print 'GETTING POST'
      
             try:
-                dicts = json.loads(request.body)
+                dicts = json.loads(request.body, encoding = 'latin1')
                 print dicts
-                name = dicts['name']
+                name = dicts['name'].lower()
                 value = dicts['value']
                 cardIcon = dicts['cardIcon']
                 exp_date = dicts['exp_date']
@@ -126,21 +186,13 @@ def createCard(request):
                 cardUser.save()
             except Exception as e:
                 print request.body
-                #print e
+                print e
                 return HttpResponse(status=500)    
             return HttpResponse(card.id)
     return HttpResponse(status=400)
         
-        
-def deleteCard(request):
-    print request.body        
-        
-        
-        
-
-
-def results(request, card_id):
-    return HttpResponse("You're looking at the results of card %s." % card_id)
-
-def vote(request, card_id):
-    return HttpResponse("You're voting on card %s." % card_id)
+def isExpired(card):
+    pass
+    
+    
+         
