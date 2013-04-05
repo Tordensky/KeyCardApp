@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -30,6 +31,8 @@ public class CreateNewCardActivity extends Activity {
 
 	private Spinner spinner = null;
 	private ImageSpinnerAdapter adapter;
+	
+	private int iconID = 0;
 	
 	private EditText cardNameField = null;
 	private String cardName  = null;
@@ -51,26 +54,39 @@ public class CreateNewCardActivity extends Activity {
 	private String cardData = null;
 	
 	
-	private Integer[] data = {
-			R.drawable.row_icon_block,
-			R.drawable.row_icon_buss_big,
-			R.drawable.row_icon_factory
-	};
+	//private Integer[] data = {
+	//		R.drawable.row_icon_block,
+	//		R.drawable.row_icon_buss_big,
+	//		R.drawable.row_icon_factory
+	//};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_new_card);
 		
-		adapter = new ImageSpinnerAdapter(this, R.layout.card_row, data);
+		adapter = new ImageSpinnerAdapter(this, R.layout.card_row, IconHandler.getIconsID());
 		
 		spinner = (Spinner)findViewById(R.id.image_spinner);
 		spinner.setAdapter(adapter);
+		initSpinner(spinner);
+		
 		
 		datePicker = (DatePicker)findViewById(R.id.date_picker);
 		calender = Calendar.getInstance();
 		
 		cardNameField = (EditText)findViewById(R.id.new_card_name);
+	}
+	
+	private void initSpinner(Spinner spinner){
+		spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+		    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+		        iconID = pos;
+		        printMsg("Pos:" +pos);
+		    }
+		    public void onNothingSelected(AdapterView<?> parent) {
+		    }
+		});
 	}
 
 	@Override
@@ -99,11 +115,14 @@ public class CreateNewCardActivity extends Activity {
 			date = calender.getTime();
 			dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
 			String dateString = dateFormat.format(date);
+			
+			//Get card icon
+			
 						
 			jsonObject = new JSONObject();
 			try {
 				jsonObject.put("name", cardName);
-				jsonObject.put("cardIcon", 1);
+				jsonObject.put("cardIcon", iconID);
 				jsonObject.put("exp_date", dateString);
 				jsonObject.put("value", "test card data value");
 				
@@ -200,7 +219,8 @@ public class CreateNewCardActivity extends Activity {
 					image = (ImageView)row.getTag();
 				}
 				
-				image.setImageResource(resourceId[position]);
+				
+				image.setImageResource(IconHandler.getLayoutResourceIDfromIconID(resourceId[position]));
 				
 				
 				return row;

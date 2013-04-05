@@ -65,7 +65,7 @@ public class CardAdapter extends ArrayAdapter<CardData>{
 			cardDataHolder.activeImage.setImageResource(R.drawable.background_disable);
 		}
 		
-		cardDataHolder.iconImage.setImageResource(getRowImageFromNum(cardData.rowImage));
+		cardDataHolder.iconImage.setImageResource(IconHandler.getLayoutResourceIDfromIconID(cardData.rowImage));
 		
 		return row;
 	}
