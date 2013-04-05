@@ -3,9 +3,7 @@ package com.example.keycardapp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
@@ -52,13 +50,6 @@ public class CreateNewCardActivity extends Activity {
 	
 	@SuppressWarnings("unused")
 	private String cardData = null;
-	
-	
-	//private Integer[] data = {
-	//		R.drawable.row_icon_block,
-	//		R.drawable.row_icon_buss_big,
-	//		R.drawable.row_icon_factory
-	//};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -69,22 +69,7 @@ public class CardAdapter extends ArrayAdapter<CardData>{
 		
 		return row;
 	}
-	
-	private int getRowImageFromNum(int imageNum){
-		 switch (imageNum) {
-         case 1:
-        	 return R.drawable.row_icon_buss_big;
-         case 2:
-        	 return R.drawable.row_icon_block;
-         case 3:
-        	 return R.drawable.row_icon_house;
-         case 4:
-        	 return R.drawable.row_icon_factory;
-    	 default:
-    		 return R.drawable.icon_house;
-		 }
-	}
-	
+		
 	static class CardDataHolder
 	{
 		TextView txtCardName;

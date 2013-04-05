@@ -23,7 +23,7 @@ public class MainActivity extends ListActivity {
 	private CardAdapter adapter;
 	private CardData[] values = null;
 
-	private SharedData sharedData = null;
+	//private SharedData sharedData = null;
 	
 	private TextView backgroundText = null;
 	
@@ -40,10 +40,8 @@ public class MainActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		sharedData = new SharedData(this);
-		
-		//getMyCards();
-		
+		//sharedData = new SharedData(this);
+				
 		//getCardDataForTesting();
 		
 		backgroundText = (TextView)findViewById(android.R.id.empty);
@@ -185,7 +183,7 @@ public class MainActivity extends ListActivity {
 			rowData.active = true;
 			
 			// TODO Add code for Activating card on UICC card here
-			String dataToPutOnCard = rowData.data;
+			// String dataToPutOnCard = rowData.data;
 			
 		}
 	}
