@@ -6,7 +6,8 @@ public class IconHandler {
 		R.drawable.icon_house,
 		R.drawable.row_icon_factory,
 		R.drawable.row_icon_buss_big,
-		R.drawable.row_icon_block
+		R.drawable.row_icon_block,
+		R.drawable.icon_plane
 	};
 	
 	public static int getIconCount(){

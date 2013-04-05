@@ -24,7 +24,7 @@
         android:adjustViewBounds="true"
         android:maxWidth="95dp"
         android:scaleType="fitStart"
-        android:src="@drawable/icon_house" />
+        android:src="@drawable/icon_plane" />
 
     <LinearLayout
         android:layout_width="wrap_content"

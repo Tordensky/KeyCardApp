@@ -42,18 +42,19 @@ public final class R {
         public static final int ic_launcher=0x7f020009;
         public static final int icon_factory=0x7f02000a;
         public static final int icon_house=0x7f02000b;
-        public static final int list_building=0x7f02000c;
-        public static final int login_sign=0x7f02000d;
-        public static final int new_top=0x7f02000e;
-        public static final int round_button=0x7f02000f;
-        public static final int row_icon_block=0x7f020010;
-        public static final int row_icon_buss_big=0x7f020011;
-        public static final int row_icon_factory=0x7f020012;
-        public static final int row_icon_house=0x7f020013;
-        public static final int scann_card_screen=0x7f020014;
-        public static final int sky=0x7f020015;
-        public static final int tag_card=0x7f020016;
-        public static final int top_screen=0x7f020017;
+        public static final int icon_plane=0x7f02000c;
+        public static final int list_building=0x7f02000d;
+        public static final int login_sign=0x7f02000e;
+        public static final int new_top=0x7f02000f;
+        public static final int round_button=0x7f020010;
+        public static final int row_icon_block=0x7f020011;
+        public static final int row_icon_buss_big=0x7f020012;
+        public static final int row_icon_factory=0x7f020013;
+        public static final int row_icon_house=0x7f020014;
+        public static final int scann_card_screen=0x7f020015;
+        public static final int sky=0x7f020016;
+        public static final int tag_card=0x7f020017;
+        public static final int top_screen=0x7f020018;
     }
     public static final class id {
         public static final int Button01=0x7f09000c;
