@@ -2,8 +2,7 @@ package com.example.simcommunicationandroidtest;
 
 import org.simalliance.openmobileapi.SEService;
 import org.simalliance.openmobileapi.SEService.CallBack;
-
-import com.library.UICCCommunication.Communication;
+import com.library.UICCCommunication.SimCommunication;
 
 
 import android.os.Bundle;
@@ -18,13 +17,13 @@ import android.widget.LinearLayout;
 
 public class SimTest extends Activity {
 	private SEService seService; 
-	private Communication communication;
+	private SimCommunication communication;
 	  
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
       final String LOG_TAG = "HelloSmartcard";
-	  communication = new Communication();
+	  communication = new SimCommunication();
 	  super.onCreate(savedInstanceState);
 	  
 	  try {

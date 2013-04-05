@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,6 +51,8 @@ public class CreateNewCardActivity extends Activity {
 	
 	@SuppressWarnings("unused")
 	private String cardData = null;
+	
+	private final static int MY_CHILD_ACTIVITY = 54;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -142,16 +145,26 @@ public class CreateNewCardActivity extends Activity {
 	
 	// TODO This is the method to read data from card
 	public void readCard(View v) {
-		// TODO ALEX! add function / action for reading in card data into byte[] cardData, if success set hasScannedCard to true
-		
-		// TODO Set this to TRUE when reading has completed successfully
-		hasScannedCard = true;
-		
-		// TODO SET DATA read from card here!
-		cardData = "";
-		
+		Intent read = new Intent(this, ScanCardActivity.class);
+		startActivityForResult(read, MY_CHILD_ACTIVITY); 
 		printMsg("Tryes to read new card");
 	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	  super.onActivityResult(requestCode, resultCode, data);
+	  switch(requestCode) {
+	    case (MY_CHILD_ACTIVITY) : {
+	      if (resultCode == Activity.RESULT_OK) {
+	  		cardData = data.getExtras().getString("mTagText");
+			hasScannedCard = true;
+			
+	      }
+	      break;
+	    } 
+	  }
+	}
+	
 	
 	private void printMsg(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();

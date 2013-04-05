@@ -9,25 +9,29 @@
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name= "org.simalliance.openmobileapi.SMARTCARD" />
-   
+    <uses-permission android:name="org.simalliance.openmobileapi.SMARTCARD" />
+    <uses-permission android:name="android.permission.NFC" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@android:style/Theme.NoTitleBar" 
-        >
-        <uses-library android:name="org.simalliance.openmobileapi" android:required="true"/>
-        
+        android:theme="@android:style/Theme.NoTitleBar" >
+        <uses-library
+            android:name="org.simalliance.openmobileapi"
+            android:required="true" />
+
         <activity
             android:name="com.example.keycardapp.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" 
+            android:screenOrientation="portrait">
+
         </activity>
         <activity
             android:name="com.example.keycardapp.LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="stateHidden" >
+            android:windowSoftInputMode="stateHidden" 
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,16 +41,24 @@
         <activity
             android:name="com.example.keycardapp.CreateNewCardActivity"
             android:label="@string/title_activity_create_new_card"
-            android:windowSoftInputMode="stateHidden" >
+            android:windowSoftInputMode="stateHidden" 
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.example.keycardapp.CreateNewUserActivity"
             android:label="@string/title_activity_create_new_user"
-            android:windowSoftInputMode="stateHidden" >
+            android:windowSoftInputMode="stateHidden" 
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="com.example.keycardapp.ShareCardActivity"
-            android:label="@string/title_activity_share_card" >
+            android:label="@string/title_activity_share_card" 
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.example.keycardapp.ScanCardActivity"
+            android:label="@string/title_activity_scan_card" 
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

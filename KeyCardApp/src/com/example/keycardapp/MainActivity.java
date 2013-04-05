@@ -3,11 +3,15 @@ package com.example.keycardapp;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.simalliance.openmobileapi.SEService;
+
+import com.library.UICCCommunication.SimCommunication;
 import com.loopj.android.http.*;
 
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,8 +37,9 @@ public class MainActivity extends ListActivity {
 	private static final int LOGOUT = Menu.FIRST + 1;
 	private static final int REFRESH = Menu.FIRST + 2; 
 	
-	
-	
+	private SimCommunication sim; 
+	private SEService seService; 
+	final String LOG_TAG = "HelloSmartcard";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,6 +49,17 @@ public class MainActivity extends ListActivity {
 				
 		//getCardDataForTesting();
 		
+		// THIS IS FOR SIM COMMUNICATION
+		sim = new SimCommunication();
+		try {
+		    Log.i(LOG_TAG, "creating SEService object");
+		    seService = new SEService(this, null);
+		} catch (SecurityException e) {
+		    Log.e(LOG_TAG, "Binding not allowed, uses-permission org.simalliance.openmobileapi.SMARTCARD?");
+		} catch (Exception e) {
+		    Log.e(LOG_TAG, "Exception: " + e.getMessage());
+		}
+			 
 		backgroundText = (TextView)findViewById(android.R.id.empty);
 		
 		registerForContextMenu(getListView());
@@ -52,7 +68,7 @@ public class MainActivity extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		getMyCards();
+		//getMyCards();
 	}
 	
 	@Override
@@ -176,15 +192,16 @@ public class MainActivity extends ListActivity {
 		if (rowData.active) {
 			rowData.active = false;
 			
-			// TODO Add code for deactivating this card on UICC card (set data to empty string?)
+			byte[] empty = new byte[] {(byte)0xD0, 0x00, 0x00};
+	     	sim.writeData(seService, empty);
 			
 		} else {
 			setAllActiveToFalse(adapter);
 			rowData.active = true;
 			
-			// TODO Add code for Activating card on UICC card here
-			// String dataToPutOnCard = rowData.data;
-			
+			String dataToPutOnCard = rowData.data;
+			printMSG(dataToPutOnCard);
+			sim.writeData(seService, dataToPutOnCard.getBytes());
 		}
 	}
 	
@@ -267,6 +284,16 @@ public class MainActivity extends ListActivity {
 	}
 
 
+	
+	@Override
+	protected void onDestroy() {
+	   if (seService != null && seService.isConnected()) {
+	      seService.shutdown();
+	   }
+	   super.onDestroy();
+	} 
+	
+	
 	private void printMSG(String msg) {
 		Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
 	}

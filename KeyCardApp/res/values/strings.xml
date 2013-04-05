@@ -32,5 +32,7 @@
     <string name="title_activity_share_card">ShareCardActivity</string>
     <string name="friendName">"Share to user: "</string>
     <string name="share">Share card</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_scan_card">ScanCardActivity</string>
 
 </resources>

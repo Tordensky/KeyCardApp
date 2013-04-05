@@ -62,7 +62,7 @@ public final class R {
         public static final int TextView01=0x7f090010;
         public static final int TextView02=0x7f09000e;
         public static final int TextView03=0x7f090013;
-        public static final int action_settings=0x7f09002b;
+        public static final int action_settings=0x7f09002c;
         public static final int activeImage=0x7f090027;
         public static final int backgroundImageLogin=0x7f090016;
         public static final int cardName=0x7f090007;
@@ -80,6 +80,7 @@ public final class R {
         public static final int loginScreen=0x7f090015;
         public static final int loginTxt=0x7f090018;
         public static final int login_password=0x7f09001b;
+        public static final int menu_settings=0x7f09002b;
         public static final int newUserButton=0x7f09001d;
         public static final int new_card_name=0x7f090008;
         public static final int new_card_name_row=0x7f090006;
@@ -105,16 +106,18 @@ public final class R {
         public static final int activity_create_new_user=0x7f030001;
         public static final int activity_login=0x7f030002;
         public static final int activity_main=0x7f030003;
-        public static final int activity_share_card=0x7f030004;
-        public static final int card_row=0x7f030005;
-        public static final int spinner_row_image=0x7f030006;
+        public static final int activity_scan_card=0x7f030004;
+        public static final int activity_share_card=0x7f030005;
+        public static final int card_row=0x7f030006;
+        public static final int spinner_row_image=0x7f030007;
     }
     public static final class menu {
-        public static final int create_new_card=0x7f080000;
-        public static final int create_new_user=0x7f080001;
-        public static final int login=0x7f080002;
-        public static final int main=0x7f080003;
-        public static final int share_card=0x7f080004;
+        public static final int activity_scan_card=0x7f080000;
+        public static final int create_new_card=0x7f080001;
+        public static final int create_new_user=0x7f080002;
+        public static final int login=0x7f080003;
+        public static final int main=0x7f080004;
+        public static final int share_card=0x7f080005;
     }
     public static final class string {
         public static final int action_settings=0x7f050001;
@@ -126,6 +129,7 @@ public final class R {
         public static final int hello_world=0x7f050002;
         public static final int list_empty=0x7f050003;
         public static final int login=0x7f050007;
+        public static final int menu_settings=0x7f050015;
         public static final int newUser=0x7f050008;
         public static final int new_card=0x7f050009;
         public static final int password=0x7f050005;
@@ -135,6 +139,7 @@ public final class R {
         public static final int title_activity_create_new_card=0x7f05000a;
         public static final int title_activity_create_new_user=0x7f05000e;
         public static final int title_activity_login=0x7f050004;
+        public static final int title_activity_scan_card=0x7f050016;
         public static final int title_activity_share_card=0x7f050012;
         public static final int username=0x7f050006;
         public static final int valid=0x7f05000c;

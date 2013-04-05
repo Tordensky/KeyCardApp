@@ -18,7 +18,7 @@ import android.util.Log;
  * A library class that simply handles the communication to the UICC card
  * It does not setup the communication channel, this is left for the user
  */
-public class Communication{
+public class SimCommunication{
 	private byte[] AID = {(byte)0xD2, 0x76, 0x00, 0x00, (byte)0x85, 0x01, 0x01};
 	private final String LOG_TAG = "UICC log";
 	// D2 76 00 00 85 01 01
