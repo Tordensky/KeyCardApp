@@ -27,7 +27,7 @@ public class MainActivity extends ListActivity {
 	private CardAdapter adapter;
 	private CardData[] values = null;
 
-	//private SharedData sharedData = null;
+	private SharedData sharedData = null;
 	
 	private TextView backgroundText = null;
 	
@@ -45,7 +45,7 @@ public class MainActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		//sharedData = new SharedData(this);
+		sharedData = new SharedData(this);
 				
 		getCardDataForTesting();
 		
@@ -192,6 +192,8 @@ public class MainActivity extends ListActivity {
 		if (rowData.active) {
 			rowData.active = false;
 			
+			sharedData.setNonCardActive();
+			
 			final byte[] empty = new byte[] {(byte)0xD0, 0x00, 0x00};
 	     	
 			new Thread(new Runnable() {
@@ -204,6 +206,8 @@ public class MainActivity extends ListActivity {
 		} else {
 			setAllActiveToFalse(adapter);
 			rowData.active = true;
+			
+			sharedData.setActiveCard(rowData.id);
 			
 			final String dataToPutOnCard = rowData.data;
 			printMSG(dataToPutOnCard);
@@ -231,11 +235,18 @@ public class MainActivity extends ListActivity {
 
 	private void getCardDataForTesting() {
 		values = new CardData[] {
-			new CardData("Husn�kkel", false, "24.05.2014 18:45:23", "Dette er et flykort", 0, 0, false),
-			new CardData("Busskort", false, "22.03.2013 19:45:23", "Dette er et busskort", 1, 1, false),
-			new CardData("Flybillet", false, "24.05.2014 18:45:23", "Dette er et flykort", 4, 0, true),
-			new CardData("Flybillet", false, "24.05.2014 18:45:23", "Dette er et flykort", 4, 0, false)
+			new CardData(0, "Husn�kkel", false, "24.05.2014 18:45:23", "Dette er et flykort", 0, 0, false),
+			new CardData(1, "Busskort", false, "22.03.2013 19:45:23", "Dette er et busskort", 1, 1, false),
+			new CardData(2, "Flybillet", false, "24.05.2014 18:45:23", "Dette er et flykort", 4, 0, true),
+			new CardData(3, "Flybillet", false, "24.05.2014 18:45:23", "Dette er et flykort", 4, 0, false)
 		};
+		
+		for (CardData value : values) {
+			if (value.id == sharedData.getActiveCard()) {
+				value.active = true;
+			}
+		}
+			
 		setListData();
 	}
 
@@ -255,17 +266,31 @@ public class MainActivity extends ListActivity {
 					
 					values = new CardData[numberOfCardsFromServer];
 					
+					int activeID = sharedData.getActiveCard();
+					boolean cardActive = false;
+					
 					// Traverse Cards
 					for (int i = 0; i < cards.length(); i++) {
 						JSONObject card = (JSONObject) cards.get(i);
 						
+						
+						int id = card.getInt("id");
+						
+						cardActive = false;
+						if (id == activeID) {
+							cardActive = true;
+						}
+						
 						values[i] = new CardData(
-								card.getInt("id"),
+								id,
 								card.getString("name").substring(0, 1).toUpperCase() +
 								card.getString("name").substring(1).toLowerCase(),
+								cardActive,
 								card.getString("exp_date"),
 								card.getString("value"),
-								card.getInt("cardIcon")
+								card.getInt("cardIcon"), 
+								0,
+								false
 								);
 					}
 					

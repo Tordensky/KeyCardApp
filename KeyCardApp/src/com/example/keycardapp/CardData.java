@@ -57,8 +57,9 @@ public class CardData {
 		this.rowImage= rowImage;
 	}
 	
-	public CardData(String cardName, Boolean active, String expire, String data, int rowImage, int role, Boolean shared){
+	public CardData(int id, String cardName, Boolean active, String expire, String data, int rowImage, int role, Boolean shared){
 		super();
+		this.id = id;
 		this.cardName = cardName;
 		this.active = active;
 		this.expire = expire;
