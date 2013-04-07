@@ -47,7 +47,7 @@ public class MainActivity extends ListActivity {
 		
 		//sharedData = new SharedData(this);
 				
-		//getCardDataForTesting();
+		getCardDataForTesting();
 		
 		// THIS IS FOR SIM COMMUNICATION
 		sim = new SimCommunication();
@@ -68,7 +68,7 @@ public class MainActivity extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		getMyCards();
+		//getMyCards();
 	}
 	
 	@Override
@@ -192,16 +192,27 @@ public class MainActivity extends ListActivity {
 		if (rowData.active) {
 			rowData.active = false;
 			
-			byte[] empty = new byte[] {(byte)0xD0, 0x00, 0x00};
-	     	sim.writeData(seService, empty);
+			final byte[] empty = new byte[] {(byte)0xD0, 0x00, 0x00};
+	     	
+			new Thread(new Runnable() {
+				    public void run() {
+				    	sim.writeData(seService, empty);
+				    }
+				  }).start();
+			
 			
 		} else {
 			setAllActiveToFalse(adapter);
 			rowData.active = true;
 			
-			String dataToPutOnCard = rowData.data;
+			final String dataToPutOnCard = rowData.data;
 			printMSG(dataToPutOnCard);
-			sim.writeData(seService, dataToPutOnCard.getBytes());
+			new Thread(new Runnable() {
+			    public void run() {
+			    	sim.writeData(seService, dataToPutOnCard.getBytes());
+			    }
+			  }).start();
+			
 		}
 	}
 	
@@ -220,7 +231,7 @@ public class MainActivity extends ListActivity {
 
 	private void getCardDataForTesting() {
 		values = new CardData[] {
-			new CardData("Husnøkkel", false, "24.05.2014 18:45:23", "Dette er et flykort", 0, 0, false),
+			new CardData("Husnï¿½kkel", false, "24.05.2014 18:45:23", "Dette er et flykort", 0, 0, false),
 			new CardData("Busskort", false, "22.03.2013 19:45:23", "Dette er et busskort", 1, 1, false),
 			new CardData("Flybillet", false, "24.05.2014 18:45:23", "Dette er et flykort", 4, 0, true),
 			new CardData("Flybillet", false, "24.05.2014 18:45:23", "Dette er et flykort", 4, 0, false)
