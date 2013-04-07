@@ -68,7 +68,7 @@ public class MainActivity extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		//getMyCards();
+		getMyCards();
 	}
 	
 	@Override
@@ -217,12 +217,13 @@ public class MainActivity extends ListActivity {
 		startActivity(intent);
 	}
 	
-	@SuppressWarnings("unused")
+
 	private void getCardDataForTesting() {
 		values = new CardData[] {
-			new CardData("Busskort", true, 1),
-			new CardData("Busskort", true, 2),
-			new CardData("Busskort", true, 3),
+			new CardData("Husnøkkel", false, "24.05.2014 18:45:23", "Dette er et flykort", 0, 0, false),
+			new CardData("Busskort", false, "22.03.2013 19:45:23", "Dette er et busskort", 1, 1, false),
+			new CardData("Flybillet", false, "24.05.2014 18:45:23", "Dette er et flykort", 4, 0, true),
+			new CardData("Flybillet", false, "24.05.2014 18:45:23", "Dette er et flykort", 4, 0, false)
 		};
 		setListData();
 	}

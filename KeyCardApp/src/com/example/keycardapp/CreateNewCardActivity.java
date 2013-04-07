@@ -118,7 +118,7 @@ public class CreateNewCardActivity extends Activity {
 				jsonObject.put("name", cardName);
 				jsonObject.put("cardIcon", iconID);
 				jsonObject.put("exp_date", dateString);
-				jsonObject.put("value", "test card data value");
+				jsonObject.put("value", cardData);
 				
 			} catch (JSONException e) {
 				e.printStackTrace();

@@ -40,12 +40,15 @@ public class CardAdapter extends ArrayAdapter<CardData>{
 			cardDataHolder = new CardDataHolder();
 			
 			cardDataHolder.txtCardName = (TextView)row.findViewById(R.id.cardName);
+			cardDataHolder.expireDate = (TextView)row.findViewById(R.id.expire_date);
 			
 			// Active image
 			cardDataHolder.activeImage = (ImageView)row.findViewById(R.id.activeImage);
 			
 			// Left side icon
 			cardDataHolder.iconImage = (ImageView)row.findViewById(R.id.rowIcon);
+			
+			cardDataHolder.rowStatus = (ImageView)row.findViewById(R.id.rowStatusIcon);
 			
 			row.setTag(cardDataHolder);
 		
@@ -58,6 +61,17 @@ public class CardAdapter extends ArrayAdapter<CardData>{
 		CardData cardData = data[position];
 		
 		cardDataHolder.txtCardName.setText(cardData.cardName);
+		cardDataHolder.expireDate.setText(cardData.expire);
+		
+		if (cardData.role == 1) {
+			cardDataHolder.rowStatus.setImageResource(R.drawable.row_state_received);
+		} else {
+			if (cardData.shared) {
+				cardDataHolder.rowStatus.setImageResource(R.drawable.row_state_shared);
+			} else {
+				cardDataHolder.rowStatus.setImageResource(R.drawable.row_state_private);
+			}
+		}
 		
 		if (cardData.active) {
 			cardDataHolder.activeImage.setImageResource(R.drawable.background_active);
@@ -73,8 +87,11 @@ public class CardAdapter extends ArrayAdapter<CardData>{
 	static class CardDataHolder
 	{
 		TextView txtCardName;
+		TextView expireDate;
+		
 		ImageView activeImage;
 		ImageView iconImage;
+		ImageView rowStatus;
 		
 	}
 	

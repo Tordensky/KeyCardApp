@@ -13,6 +13,8 @@ public class CardData {
 	public int id;
 	public int rowImage = 0;
 	
+	public int role = 0;
+	public Boolean shared = false;
 	
 	public CardData(){
 		super();
@@ -36,15 +38,6 @@ public class CardData {
 		this.rowImage = rowImage;
 	}
 	
-	public CardData(String cardName, Boolean active, String expire, String type, int rowImage){
-		super();
-		this.cardName = cardName;
-		this.active = active;
-		this.expire = expire;
-		this.type = type;
-		this.rowImage= rowImage;
-	}
-	
 	public CardData(int id, String cardName,  String expire, String data, int rowImage){
 		super();
 		
@@ -54,4 +47,26 @@ public class CardData {
 		this.data = data;
 		this.rowImage= rowImage;
 	}
+	
+	public CardData(String cardName, Boolean active, String expire, String type, int rowImage){
+		super();
+		this.cardName = cardName;
+		this.active = active;
+		this.expire = expire;
+		this.type = type;
+		this.rowImage= rowImage;
+	}
+	
+	public CardData(String cardName, Boolean active, String expire, String data, int rowImage, int role, Boolean shared){
+		super();
+		this.cardName = cardName;
+		this.active = active;
+		this.expire = expire;
+		this.data = data;
+		this.rowImage= rowImage;
+		this.role = role;
+		this.shared  = shared;
+	}
+	
+	
 }
