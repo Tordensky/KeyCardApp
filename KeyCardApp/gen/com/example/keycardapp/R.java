@@ -64,7 +64,7 @@ public final class R {
     public static final class id {
         public static final int Button01=0x7f09000c;
         public static final int FrameLayout1=0x7f09001e;
-        public static final int LinearLayout2=0x7f090021;
+        public static final int LinearLayout2=0x7f090022;
         public static final int RelativeLayout1=0x7f09000d;
         public static final int TextView01=0x7f090010;
         public static final int TextView02=0x7f09000e;
@@ -106,7 +106,7 @@ public final class R {
         public static final int share_user_name=0x7f090023;
         public static final int spinner_image=0x7f09002b;
         public static final int spinner_row=0x7f09002a;
-        public static final int textView1=0x7f090022;
+        public static final int textView1=0x7f090021;
         public static final int textView3=0x7f09001a;
     }
     public static final class layout {

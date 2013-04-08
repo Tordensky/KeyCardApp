@@ -47,7 +47,7 @@ public class MainActivity extends ListActivity {
 		
 		sharedData = new SharedData(this);
 				
-		getCardDataForTesting();
+		//getCardDataForTesting();
 		
 		// THIS IS FOR SIM COMMUNICATION
 		sim = new SimCommunication();
@@ -68,7 +68,7 @@ public class MainActivity extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		//getMyCards();
+		getMyCards();
 	}
 	
 	@Override
@@ -94,11 +94,15 @@ public class MainActivity extends ListActivity {
 			return true;
 			
 		case SHARE:
-			printMSG("SHARE CARD");
-			Intent intent = new Intent(this, ShareCardActivity.class);
-			intent.putExtra("cardID", rowData.id);
-			intent.putExtra("cardName", rowData.cardName);
-			startActivity(intent);
+			if (rowData.expired == false){
+				printMSG("SHARE CARD");
+				Intent intent = new Intent(this, ShareCardActivity.class);
+				intent.putExtra("cardID", rowData.id);
+				intent.putExtra("cardName", rowData.cardName);
+				startActivity(intent);
+			} else {
+				printMSG("Can't share expired card");
+			}
     	}
     		
     	return super.onContextItemSelected(item);
@@ -189,34 +193,39 @@ public class MainActivity extends ListActivity {
 	}
 	
 	private void changeState(CardData rowData, CardAdapter adapter) {
-		if (rowData.active) {
-			rowData.active = false;
-			
-			sharedData.setNonCardActive();
-			
-			final byte[] empty = new byte[] {(byte)0xD0, 0x00, 0x00};
-	     	
-			new Thread(new Runnable() {
+		if (!rowData.expired) {
+			if (rowData.active) {
+				rowData.active = false;
+				
+				sharedData.setNonCardActive();
+				
+				final byte[] empty = new byte[] {(byte)0xD0, 0x00, 0x00};
+		     	
+				new Thread(new Runnable() {
+					    public void run() {
+					    	sim.writeData(seService, empty);
+					    }
+					  }).start();
+				
+				
+			} else {
+				setAllActiveToFalse(adapter);
+				rowData.active = true;
+				
+				sharedData.setActiveCard(rowData.id);
+				
+				final String dataToPutOnCard = rowData.data;
+				printMSG(dataToPutOnCard);
+				new Thread(new Runnable() {
 				    public void run() {
-				    	sim.writeData(seService, empty);
+				    	sim.writeData(seService, dataToPutOnCard.getBytes());
 				    }
 				  }).start();
-			
-			
-		} else {
-			setAllActiveToFalse(adapter);
-			rowData.active = true;
-			
-			sharedData.setActiveCard(rowData.id);
-			
-			final String dataToPutOnCard = rowData.data;
-			printMSG(dataToPutOnCard);
-			new Thread(new Runnable() {
-			    public void run() {
-			    	sim.writeData(seService, dataToPutOnCard.getBytes());
-			    }
-			  }).start();
-			
+				
+			}
+		}
+		else {
+			printMSG("Cant activate expired card");
 		}
 	}
 	
@@ -233,12 +242,13 @@ public class MainActivity extends ListActivity {
 	}
 	
 
+	@SuppressWarnings("unused")
 	private void getCardDataForTesting() {
 		values = new CardData[] {
-			new CardData(0, "Husnï¿½kkel", false, "24.05.2014 18:45:23", "Dette er et flykort", 0, 0, false),
-			new CardData(1, "Busskort", false, "22.03.2013 19:45:23", "Dette er et busskort", 1, 1, false),
-			new CardData(2, "Flybillet", false, "24.05.2014 18:45:23", "Dette er et flykort", 4, 0, true),
-			new CardData(3, "Flybillet", false, "24.05.2014 18:45:23", "Dette er et flykort", 4, 0, false)
+			new CardData(0, "Husnøkkel", false, "24.05.2014 18:45:23", "Dette er et flykort", 0, 0, false, false),
+			new CardData(1, "Busskort", false, "22.03.2013 19:45:23", "Dette er et busskort", 1, 1, false, false),
+			new CardData(2, "Flybillet", false, "24.05.2014 18:45:23", "Dette er et flykort", 4, 0, true, true),
+			new CardData(3, "Flybillet", false, "24.05.2014 18:45:23", "Dette er et flykort", 4, 0, false, true)
 		};
 		
 		for (CardData value : values) {
@@ -289,8 +299,9 @@ public class MainActivity extends ListActivity {
 								card.getString("exp_date"),
 								card.getString("value"),
 								card.getInt("cardIcon"), 
-								0,
-								false
+								card.getInt("role"),
+								card.getBoolean("shared"),
+								card.getBoolean("expired")
 								);
 					}
 					

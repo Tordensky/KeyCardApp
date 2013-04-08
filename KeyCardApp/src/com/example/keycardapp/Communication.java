@@ -18,7 +18,7 @@ public class Communication {
 
 	//private static final String BASE_URL = "http://129.242.22.146";
 
-	private static final String BASE_URL = "http://129.242.22.150";
+	private static final String BASE_URL = "http://129.242.22.146";
 	private static final String LOGIN_URL = "/accounts/login/";
 	
 	private static AsyncHttpClient client = new AsyncHttpClient();
