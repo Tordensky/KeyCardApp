@@ -31,7 +31,6 @@ def index(request):
 
     cardList = []   
     for card in cards:
-
         cardUserObjects = card.carduser_set.all()
         for cardUserObject in cardUserObjects: 
             cardInfoDict = {}
@@ -94,40 +93,29 @@ def shareCard(request, card_id):
 
                 # user is self, cannot share with yourself
                 if request.user.username == name:
-                    print "YOU CANNOT SHARE TO YOURSELF"
                     return HttpResponse(status=403)
-                print "eeee"
-                existingCardUser = Card.objects.filter(users__id = userToShareKey.pk, pk = card_id)
-                for card in existingCardUser:
-                    print card
-                   
-                print "asdasd"
-#                existingCardUser.filter(pk = card_id)
-                print card_id
-      
                 
-                for card in existingCardUser:
-                    print card.pk
-                    print card
+                existingCardUser = Card.objects.filter(users__id = userToShareKey.pk, pk = card_id)
+
+                # user already has this card
                 if existingCardUser.exists():
-                    print "HE ALREADY HAS THIS CARD"
                     return HttpResponse(status=403)
-                print "HE DIDNT HAVE THE CARD"
+                
+                # share the card
                 for card in cardToShare:
-                    print "hei"
                     cardUserObjects = card.carduser_set.all()
                     for cardUserObject in cardUserObjects:
                         role = cardUserObject.role
                         if role == 0:
                             try:
                                 cardUser = CardUser(user = userToShareKey, card = card, expiry_date = exp_date, role=1)
-                                print "test2"
                                 cardUser.save()
                             except Exception as e:
                                 print e
                                 return HttpResponse(status=500)
                         else:
                             continue
+                        
             return HttpResponse(status=200)
         return HttpResponse(status=400)
     else:
@@ -137,10 +125,12 @@ def shareCard(request, card_id):
 def getCard(request, card_id):
     if request.user.is_authenticated():
         if request.method == 'GET':
-            handleGetCardRequest(request, card_id)
+            response = handleGetCardRequest(request, card_id)
+            return response
               
         elif request.method == 'DELETE':
-            handleDeleteCardRequest(request, card_id)         
+            response = handleDeleteCardRequest(request, card_id) 
+            return response        
     else:
         # user not authenticated return 401 Unauthorized
         return HttpResponse(status=401)
@@ -159,7 +149,7 @@ def handleDeleteCardRequest(request, card_id):
         cardToBeDeleted = Card.objects.filter(pk = card_id)            
         cardToBeDeleted.filter(users__id = request.user.id)
     except Exception as e:
-        print e
+        print e, "1"
         return HttpResponse(status=500) 
     
     if cardToBeDeleted.exists():
