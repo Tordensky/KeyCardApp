@@ -46,6 +46,8 @@ public class MainActivity extends ListActivity {
 		setContentView(R.layout.activity_main);
 		
 		sharedData = new SharedData(this);
+		
+		rowGraphics.initGraphics(this);
 				
 		//getCardDataForTesting();
 		
@@ -189,6 +191,7 @@ public class MainActivity extends ListActivity {
 	private void setListData(){
 		adapter = new CardAdapter(this, R.layout.card_row, values);
 		
+		
 		setListAdapter(adapter);
 	}
 	
@@ -215,7 +218,7 @@ public class MainActivity extends ListActivity {
 				sharedData.setActiveCard(rowData.id);
 				
 				final String dataToPutOnCard = rowData.data;
-				printMSG(dataToPutOnCard);
+				//printMSG(dataToPutOnCard);
 				new Thread(new Runnable() {
 				    public void run() {
 				    	sim.writeData(seService, dataToPutOnCard.getBytes());

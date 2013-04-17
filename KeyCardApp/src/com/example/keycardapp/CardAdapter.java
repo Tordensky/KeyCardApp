@@ -2,6 +2,7 @@ package com.example.keycardapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +18,16 @@ public class CardAdapter extends ArrayAdapter<CardData>{
 	
 	CardData data[];
 	
+	//private rowGraphics graphics = null;
+	
 	public CardAdapter(Context context, int layoutResourceId, CardData[] data) {
 		
 		super(context, layoutResourceId, data);
 		
 		this.layoutResourceId = layoutResourceId;
 		this.context = context;
-		this.data = data;	
+		this.data = data;
+		
 	}
 
 	@Override
@@ -31,6 +35,8 @@ public class CardAdapter extends ArrayAdapter<CardData>{
 		View row = convertView;			
 		
 		CardDataHolder cardDataHolder = null;
+		CardData cardData = data[position];
+		
 		
 		if (row == null)
 		{
@@ -50,6 +56,9 @@ public class CardAdapter extends ArrayAdapter<CardData>{
 			
 			cardDataHolder.rowStatus = (ImageView)row.findViewById(R.id.rowStatusIcon);
 			
+			
+			cardDataHolder.iconImage.setImageResource(IconHandler.getLayoutResourceIDfromIconID(cardData.rowImage));
+			
 			row.setTag(cardDataHolder);
 		
 		}
@@ -57,33 +66,59 @@ public class CardAdapter extends ArrayAdapter<CardData>{
 		{
 			cardDataHolder = (CardDataHolder)row.getTag();
 		}
-		
-		CardData cardData = data[position];
-		
+			
 		cardDataHolder.txtCardName.setText(cardData.cardName);
 		cardDataHolder.expireDate.setText(cardData.expireDate);
 		
 		if (cardData.role == 1) {
-			cardDataHolder.rowStatus.setImageResource(R.drawable.row_state_received);
+			//cardDataHolder.rowStatus.setImageResource(R.drawable.row_state_received);
+			if (!cardDataHolder.rowStatus.getDrawable().getConstantState().equals(
+					rowGraphics.stateReceived.getConstantState())) {
+				cardDataHolder.rowStatus.setImageDrawable(rowGraphics.stateReceived);
+			}
+		
 		} else {
 			if (cardData.shared) {
-				cardDataHolder.rowStatus.setImageResource(R.drawable.row_state_shared);
+				//cardDataHolder.rowStatus.setImageResource(R.drawable.row_state_shared);
+				if (!cardDataHolder.rowStatus.getDrawable().getConstantState().equals(
+						rowGraphics.stateShared.getConstantState())) {
+					cardDataHolder.rowStatus.setImageDrawable(rowGraphics.stateShared);
+				}
 			} else {
-				cardDataHolder.rowStatus.setImageResource(R.drawable.row_state_private);
+				//cardDataHolder.rowStatus.setImageResource(R.drawable.row_state_private);
+				if (!cardDataHolder.rowStatus.getDrawable().getConstantState().equals(
+						rowGraphics.statePrivate.getConstantState())) {
+					cardDataHolder.rowStatus.setImageDrawable(rowGraphics.statePrivate);
+				}
 			}
 		}
 		
 		if (cardData.expired){
-			cardDataHolder.activeImage.setImageResource(R.drawable.background_expired);
-		} else {
-			if (cardData.active) {
-				cardDataHolder.activeImage.setImageResource(R.drawable.background_active);
-			} else {
-				cardDataHolder.activeImage.setImageResource(R.drawable.background_disable);
+			//cardDataHolder.activeImage.setImageResource(R.drawable.background_expired);
+			if (!cardDataHolder.activeImage.getDrawable().getConstantState().equals(
+					rowGraphics.rowExpired.getConstantState())) {
+			
+				cardDataHolder.activeImage.setImageDrawable(rowGraphics.rowExpired);
 			}
 		}
 		
-		cardDataHolder.iconImage.setImageResource(IconHandler.getLayoutResourceIDfromIconID(cardData.rowImage));
+		else {
+			if (cardData.active) {
+				//cardDataHolder.activeImage.setImageResource(R.drawable.background_active);
+				
+				if (!cardDataHolder.activeImage.getDrawable().getConstantState().equals(
+						rowGraphics.rowActive.getConstantState())) {
+				
+					cardDataHolder.activeImage.setImageDrawable(rowGraphics.rowActive);
+				}
+			} else {
+				//cardDataHolder.activeImage.setImageResource(R.drawable.background_disable);
+				if (!cardDataHolder.activeImage.getDrawable().getConstantState().equals(
+						rowGraphics.rowDisable.getConstantState())) {
+					cardDataHolder.activeImage.setImageDrawable(rowGraphics.rowDisable);
+				}
+			}
+		}
 		
 		return row;
 	}
@@ -98,5 +133,7 @@ public class CardAdapter extends ArrayAdapter<CardData>{
 		ImageView rowStatus;
 		
 	}
+	
+	
 	
 }

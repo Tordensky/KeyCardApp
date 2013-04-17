@@ -91,7 +91,7 @@ public class LoginActivity extends Activity {
 	@Override
 	public void startActivity(Intent intent) {
 		super.startActivity(intent);
-		//overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+		overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 	}
 	
 	private void printMsg(String msg) {

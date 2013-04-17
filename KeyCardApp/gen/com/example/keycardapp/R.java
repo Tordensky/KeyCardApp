@@ -57,14 +57,15 @@ public final class R {
         public static final int row_state_received=0x7f020018;
         public static final int row_state_shared=0x7f020019;
         public static final int scann_card_screen=0x7f02001a;
-        public static final int sky=0x7f02001b;
-        public static final int tag_card=0x7f02001c;
-        public static final int top_screen=0x7f02001d;
+        public static final int share_top=0x7f02001b;
+        public static final int sky=0x7f02001c;
+        public static final int tag_card=0x7f02001d;
+        public static final int top_screen=0x7f02001e;
     }
     public static final class id {
         public static final int Button01=0x7f09000c;
         public static final int FrameLayout1=0x7f09001e;
-        public static final int LinearLayout2=0x7f090022;
+        public static final int LinearLayout2=0x7f090021;
         public static final int RelativeLayout1=0x7f09000d;
         public static final int TextView01=0x7f090010;
         public static final int TextView02=0x7f09000e;
@@ -106,7 +107,7 @@ public final class R {
         public static final int share_user_name=0x7f090023;
         public static final int spinner_image=0x7f09002b;
         public static final int spinner_row=0x7f09002a;
-        public static final int textView1=0x7f090021;
+        public static final int textView1=0x7f090022;
         public static final int textView3=0x7f09001a;
     }
     public static final class layout {
