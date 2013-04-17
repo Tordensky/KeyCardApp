@@ -16,7 +16,7 @@
         android:layout_marginTop="100dp"
         android:adjustViewBounds="true"
         android:scaleType="fitEnd"
-        android:src="@drawable/new_top" />
+        android:src="@drawable/share_top" />
 
     <LinearLayout
         android:id="@+id/LinearLayout2"
