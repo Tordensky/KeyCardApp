@@ -61,7 +61,7 @@ public class CardAdapter extends ArrayAdapter<CardData>{
 		CardData cardData = data[position];
 		
 		cardDataHolder.txtCardName.setText(cardData.cardName);
-		cardDataHolder.expireDate.setText(cardData.expire);
+		cardDataHolder.expireDate.setText(cardData.expireDate);
 		
 		if (cardData.role == 1) {
 			cardDataHolder.rowStatus.setImageResource(R.drawable.row_state_received);
@@ -73,10 +73,14 @@ public class CardAdapter extends ArrayAdapter<CardData>{
 			}
 		}
 		
-		if (cardData.active) {
-			cardDataHolder.activeImage.setImageResource(R.drawable.background_active);
+		if (cardData.expired){
+			cardDataHolder.activeImage.setImageResource(R.drawable.background_expired);
 		} else {
-			cardDataHolder.activeImage.setImageResource(R.drawable.background_disable);
+			if (cardData.active) {
+				cardDataHolder.activeImage.setImageResource(R.drawable.background_active);
+			} else {
+				cardDataHolder.activeImage.setImageResource(R.drawable.background_disable);
+			}
 		}
 		
 		cardDataHolder.iconImage.setImageResource(IconHandler.getLayoutResourceIDfromIconID(cardData.rowImage));

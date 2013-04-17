@@ -52,4 +52,17 @@ public class SharedData {
 		_prefsEditor.commit();
 	}
 	
+	public void setActiveCard(int id) {
+		_prefsEditor.putInt("cardActiveID", id);
+		_prefsEditor.commit();
+	}
+	
+	public int getActiveCard() {
+		return _sharedPrefs.getInt("cardActiveID", -1);
+	}
+	
+	public void setNonCardActive() {
+		setActiveCard(-1);
+	}
+	
 }

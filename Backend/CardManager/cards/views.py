@@ -2,6 +2,7 @@
 from django.http import HttpResponse
 from cards.models import Card, CardUser
 from django.contrib.auth.models import User
+from datetime import datetime
 import json
 
 
@@ -29,15 +30,32 @@ def index(request):
         return HttpResponse(status=401)
 
     cardList = []   
-
     for card in cards:
+
         cardUserObjects = card.carduser_set.all()
-        
-        for cardUserObject in cardUserObjects:
-            if cardUserObject.user == request.user: 
+        for cardUserObject in cardUserObjects: 
+            cardInfoDict = {}
+            if cardUserObject.user == request.user:
+                print str(datetime.now())
+                print cardUserObject.expiry_date.isoformat()
+                print cardUserObject.expiry_date
+                
+                if cardUserObject.expiry_date <= datetime.now() and cardUserObject.expired == False:
+                    changeExpired(cardUserObject)
+                
+                    
                 cardInfoDict = {'id':card.pk, 'name':card.name, 'value': card.value, 'cardIcon': card.cardIcon, 'exp_date': cardUserObject.expiry_date.isoformat() , 'role': cardUserObject.role, 'expired':cardUserObject.expired}
+                    
+                if cardUserObjects.count() > 1:  
+                    cardInfoDict['shared'] = True
+                else:
+                    cardInfoDict['shared'] = False
                 cardList.append(cardInfoDict)
-    
+            continue
+                   
+
+                
+        
         
     returnMsg = {'cards': cardList}
     returnMsg = json.dumps(returnMsg)
@@ -45,6 +63,15 @@ def index(request):
     return HttpResponse(returnMsg, content_type='application/json')
 
 
+
+
+def changeExpired(cardUserObject):
+    print cardUserObject
+    if cardUserObject.expired == True:
+        cardUserObject.expired = False
+    else:
+        cardUserObject.expired = True
+    cardUserObject.save()
 
 def shareCard(request, card_id):
     print json.loads(request.body)
@@ -120,18 +147,20 @@ def getCard(request, card_id):
         
             return HttpResponse(c)
         elif request.method == 'DELETE':
-            
-            #cardToBeDeleted = Card.objects.get(pk = card_id)
-            
             cardToBeDeleted = Card.objects.filter(pk = card_id)
             
             cardToBeDeleted.filter(users__id = request.user.id)
-            #cardToBeDeleted.objects.filter(cardToBeDeleted.pk == card_id)
+            
             if cardToBeDeleted.exists():
                 for card in cardToBeDeleted:
                     cardUserObjects = card.carduser_set.all()
                     for cardUserObject in cardUserObjects:
-                        role = cardUserObject.role
+                        print cardUserObject
+                        print cardUserObject.user
+                        
+                        # get current users role, only role 0 can delete card completly
+                        if cardUserObject.user == request.user:  
+                            role = cardUserObject.role
                         
                 if role == 0:
                     try:
