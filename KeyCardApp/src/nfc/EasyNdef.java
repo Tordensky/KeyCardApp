@@ -7,7 +7,6 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
-import android.nfc.tech.NfcA;
 import android.os.Parcelable;
 import android.util.Log;
 
