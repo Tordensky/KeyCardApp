@@ -66,7 +66,6 @@ def index(request):
 
 
 def changeExpired(cardUserObject):
-    print cardUserObject
     if cardUserObject.expired == True:
         cardUserObject.expired = False
     else:
@@ -74,12 +73,14 @@ def changeExpired(cardUserObject):
     cardUserObject.save()
 
 def shareCard(request, card_id):
-    print json.loads(request.body)
     if request.user.is_authenticated():
         if request.method == 'POST':
-            cards = Card.objects.filter(users__id = request.user.id)
-            cardToShare = cards.filter(pk = card_id)
-            
+            try:
+                cards = Card.objects.filter(users__id = request.user.id)
+                cardToShare = cards.filter(pk = card_id)
+            except Exception as e:
+                print e
+                return HttpResponse(status=500)
             if cardToShare.exists():
                 dicts = json.loads(request.body)
                 name = dicts['username']
@@ -128,100 +129,113 @@ def shareCard(request, card_id):
                         else:
                             continue
             return HttpResponse(status=200)
+        return HttpResponse(status=400)
+    else:
+        return HttpResponse(status=401)
 
-
-#@login_required
+# URL : /cards/id
 def getCard(request, card_id):
-    print request.method
-    print 'getting card request'
     if request.user.is_authenticated():
         if request.method == 'GET':
-    #        try:
-            card = Card.objects.filter(users__id = request.user.id)
-            print card
-            c = card.filter(pk = card_id)
-            print c
-    #        except Exception as e:
-    #            return HttpResponse(status=500), e   
-        
-        
-            return HttpResponse(c)
+            handleGetCardRequest(request, card_id)
+              
         elif request.method == 'DELETE':
-            cardToBeDeleted = Card.objects.filter(pk = card_id)
-            
-            cardToBeDeleted.filter(users__id = request.user.id)
-            
-            if cardToBeDeleted.exists():
-                for card in cardToBeDeleted:
-                    cardUserObjects = card.carduser_set.all()
-                    for cardUserObject in cardUserObjects:
-                        print cardUserObject
-                        print cardUserObject.user
-                        
-                        # get current users role, only role 0 can delete card completly
-                        if cardUserObject.user == request.user:  
-                            role = cardUserObject.role
-                        
-                if role == 0:
-                    try:
-                        CardUser.objects.filter(card = card_id).delete()
-                        cardToBeDeleted.delete()
-                    except Exception as e:      
-                        print e, "DELETING FAILED, role was 0"
-                        return HttpResponse(status=500)  
-                    #delete card and all relations
-                    
-                else:
-                    try:
-                        cardUserToBeDeleted = CardUser.objects.filter(card = card_id)
-                        cardUserToBeDeleted.filter(user = request.user).delete()
-                        
-                    except Exception as e:      
-                        print e, "DELETING FAILED, role was 1"
-                        return HttpResponse(status=500)  
-                    #delete only your relation to card
-                    
-                #delete card and return OK
-                return HttpResponse(status=200)
-            else:
-                #do noting and return 403
-                return HttpResponse(status=403)
+            handleDeleteCardRequest(request, card_id)         
+    else:
+        # user not authenticated return 401 Unauthorized
+        return HttpResponse(status=401)
 
 
-
-def createCard(request):
-    print request.user.id,  "is trying to Create card"
-    if request.user.is_authenticated():
-        if request.method == 'POST':
-            print 'GETTING POST'
-     
+def handleGetCardRequest(request, card_id):
+    try:
+        card = Card.objects.filter(users__id = request.user.id)
+        c = card.filter(pk = card_id)
+        return HttpResponse(c)
+    except Exception as e:
+        return HttpResponse(status=500), e   
+    
+def handleDeleteCardRequest(request, card_id):
+    try:
+        cardToBeDeleted = Card.objects.filter(pk = card_id)            
+        cardToBeDeleted.filter(users__id = request.user.id)
+    except Exception as e:
+        print e
+        return HttpResponse(status=500) 
+    
+    if cardToBeDeleted.exists():
+        for card in cardToBeDeleted:
+            cardUserObjects = card.carduser_set.all()
+            for cardUserObject in cardUserObjects:
+                # get current users role
+                if cardUserObject.user == request.user:  
+                    role = cardUserObject.role
+        # only role 0 can delete card completely        
+        if role == 0:
             try:
-                dicts = json.loads(request.body, encoding = 'latin1')
-                print dicts
-                name = dicts['name'].lower()
-                value = dicts['value']
-                cardIcon = dicts['cardIcon']
-                exp_date = dicts['exp_date']
-                
-                print exp_date, "exp date!!"
-                print name , "name!!!"
-                print cardIcon, "cardfICON!!!!"
-                print value, "VALUE"
-                card = Card(name = name, value = value, cardIcon = cardIcon)
+                CardUser.objects.filter(card = card_id).delete()
+                cardToBeDeleted.delete()
+            except Exception as e:      
+                print e, "DELETING FAILED, role was 0"
+                return HttpResponse(status=500)  
+            #delete card and all relations
+            
+        else:
+            try:
+                cardUserToBeDeleted = CardUser.objects.filter(card = card_id)
+                cardUserToBeDeleted.filter(user = request.user).delete()                    
+            except Exception as e:      
+                print e, "DELETING FAILED, role was 1"
+                return HttpResponse(status=500)                 
+        return HttpResponse(status=200)
+    else:
+        #do noting and return 403 Forbidden
+        return HttpResponse(status=403)
+    
+# URL /cards/new
+def createCard(request):
+    if request.user.is_authenticated():
+        if request.method == 'POST': 
+            try:
+                formDict = json.loads(request.body, encoding = 'latin1')
+            except ValueError as e:
+                print e
+                return HttpResponse(status=500)
+            try:
+                values = parseCreateCardFormData(formDict)             
+                card = Card(name = values[0], value = values[1], cardIcon = values[2])
                 card.save()
-                print "test 1"
-                cardUser = CardUser(user = request.user, card = card, expiry_date = exp_date)
-                print "test2"
+                cardUser = CardUser(user = request.user, card = card, expiry_date = values[3])
                 cardUser.save()
             except Exception as e:
-                print request.body
                 print e
                 return HttpResponse(status=500)    
             return HttpResponse(card.id)
-    return HttpResponse(status=400)
+        else:
+            return HttpResponse(status=400)
+    
+    return HttpResponse(status=401)
+
+def parseCreateCardFormData(formDict):
+    keys = []
+    try:
+        name = formDict['name'].lower()
+        value = formDict['value']
+        cardIcon = formDict['cardIcon']
+        exp_date = formDict['exp_date']
+    except KeyError as e:
+        print e
+        return keys
+    keys = [name, value, cardIcon, exp_date]
+    return keys
+    
+    
+def getUsersCards(request):
+    try:
+        cards = Card.objects.filter(users__id = request.user.id)
+    except Exception as e:
+        print e       
         
 def isExpired(card):
     pass
     
     
-         
