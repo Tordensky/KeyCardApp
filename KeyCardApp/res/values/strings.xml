@@ -12,7 +12,7 @@
     <color name="transparent">#ffffffff</color>
 
     <string name="list_empty">Large Text</string>
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_login">Easy Card</string>
     <string name="password">Password</string>
     <string name="username">Username:</string>
     <string name="login">Log in</string>

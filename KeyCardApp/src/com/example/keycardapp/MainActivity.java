@@ -218,7 +218,7 @@ public class MainActivity extends ListActivity {
 				sharedData.setActiveCard(rowData.id);
 				
 				final String dataToPutOnCard = rowData.data;
-				//printMSG(dataToPutOnCard);
+
 				new Thread(new Runnable() {
 				    public void run() {
 				    	sim.writeData(seService, dataToPutOnCard.getBytes());
