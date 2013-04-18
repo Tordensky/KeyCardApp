@@ -6,6 +6,7 @@ from django.http import HttpResponse
 import json
 
 def loginToServer(request):
+    print "LOGGING OUT"
     username = request.GET.get('user')
     password = request.GET.get('password')
     print username, password
@@ -61,6 +62,7 @@ def newUser(request):
            
         
 def logoutFromServer(request):
+    print request.method
     print "LOGGING OUT"
     logout(request)
     return HttpResponse(status=200)

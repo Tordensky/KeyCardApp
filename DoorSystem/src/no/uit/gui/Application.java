@@ -25,7 +25,6 @@ public class Application  implements ActionListener {
 	
 	private JFrame frame;
 	
-	private String key = "A12E2C";
 	private Communication communication;
 
 	BufferedImage locked, unlocked;
@@ -154,11 +153,11 @@ public class Application  implements ActionListener {
 	public void run(){
 		while(true){
 			try {
-				communication.connectToMobile();
-				byte[] data = communication.readData();
-				communication.closeConnectionToCard();
+				boolean door = communication.connect();
+				//byte[] data = communication.readData();
+				//communication.closeConnectionToCard();
 				
-				if (data[0] == (byte)0xD0){
+				if (door){
 					
 					wIcon1.setVisible(false);
 					wIcon2.setVisible(true);

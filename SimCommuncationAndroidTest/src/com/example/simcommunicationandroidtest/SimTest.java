@@ -49,9 +49,9 @@ public class SimTest extends Activity {
 	  button.setText("Click Me");
 	  button.setOnClickListener(new OnClickListener() {
 	    public void onClick(View v) {
-	    	byte[] empty = new byte[] {(byte)0xD0, 0x00, 0x00};
-	     	//communication.writeData(seService, empty);
-	     	//Log.d(LOG_TAG ,"data on card " + communication.readData(seService));
+	    	byte[] empty = new byte[] {1, 3, -96, 16, 68, 3, 13, -47, 1, 9, 84, 2, 101, 110, 65, 54, 66, 55, 67, 54, -2, 0, 0, 54};
+	     	communication.writeData(seService, empty);
+	     	Log.d(LOG_TAG ,"data on card " + communication.readData(seService));
 	    	
 	    }
 	  });
