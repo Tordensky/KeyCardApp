@@ -1,6 +1,8 @@
 package no.uit.smartcard;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.Collections;
 
 import javax.smartcardio.Card;
 import javax.smartcardio.CardChannel;
@@ -18,9 +20,14 @@ public class Communication {
 	protected Card card;
 	protected CardChannel channel;
 	private CardTerminal terminal;
+	private CardObject typeCard;
 	
 	private byte[] AID = {(byte)0xD2,0x76, 0x00,0x00, (byte)0x85,0x01,0x01};
+	private final static byte[] ATR_MIFARE_ULTRALIGHT = {(byte)59, (byte)-113, (byte)-128, (byte)1, (byte)-128, (byte)79, (byte)12, (byte)-96, (byte)0, (byte)0, (byte)3, (byte)6, (byte)3, (byte)0, (byte)3, (byte)0, (byte)0, (byte)0, (byte)0, (byte)104};
+	private final static byte[] ATR_MOBILE = {(byte)59, (byte)-127, (byte)128, (byte)1, (byte)-128, (byte)-128 };
 	
+	
+	private final static String key = "A6B7C6";
 	public Communication() throws CardException{
 		this.setupTerminal();
 	}
@@ -29,18 +36,16 @@ public class Communication {
 	public static void main(String[] args){
 		try {
 		    Communication cc = new Communication();
-		    cc.connectToMobile();
-		    cc.readData();
-		    cc.closeConnectionToCard();
-			
-		} catch (CardException e) {
+		    System.out.println(cc.connect());
+
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	
-	public byte[] readData() throws CardException{
+	public byte[] readDataMobile() throws CardException{
 		 
 		 //Read the len of data
 		 byte[] readCommand = new byte[]
@@ -67,8 +72,33 @@ public class Communication {
 		 return r.getData();
 		
 	}
+	public byte[] readDataCard() throws CardException, UnsupportedEncodingException{
+		return typeCard.readCard();
+	}
 	
-	
+	private boolean contains(byte[] source, byte[] sub){
+		
+		int len = 0; int j= 0; int tmp = 0;
+		for (int i = 0; i < source.length; i ++, j += tmp){
+			
+			if (j >= sub.length)
+				break;
+
+			if (source[i] == sub[j]){
+				tmp = 1;
+				len++;
+			}
+			else{
+				tmp = 0;
+				j = 0;
+			}
+		}
+
+		if (len == sub.length)
+			return true;
+		
+		return false;
+	}
 	private void selectAplet() throws CardException{
 		ResponseAPDU r;
 		
@@ -107,9 +137,10 @@ public class Communication {
 	 * Exclusive connection to the mobile
 	 * @return
 	 * @throws CardException
+	 * @throws UnsupportedEncodingException 
 	 * @throws InvalidCardException - card type not supported
 	 */
-	public boolean connectToMobile() throws CardException{
+	public boolean connect() throws CardException, UnsupportedEncodingException{
 		if (terminal == null)
 			return false;
 			
@@ -117,18 +148,35 @@ public class Communication {
 			card = terminal.connect("T=1");
 			
 			channel = card.getBasicChannel();
-			System.out.println(card.getATR());
-
-			selectAplet();
+			byte[] tmpATR = card.getATR().getBytes(); 
 			
-			card.beginExclusive();
-			return true;
+			if (Arrays.equals(tmpATR, ATR_MIFARE_ULTRALIGHT)){
+				typeCard = new MifareUltralight(card, channel);
+				card.beginExclusive();
+				byte[] data = readDataCard();
+				System.out.println("Data:" + Arrays.toString(data));
+				closeConnectionToCard();
+				return contains(data, key.getBytes());
+			}
+			else{
+				System.out.println("Mobile connected");
+				selectAplet();
+				card.beginExclusive();
+				byte[] data = readDataMobile();
+				System.out.println("Data:" + Arrays.toString(data));
+				closeConnectionToCard();
+				
+				
+				return contains(data,key.getBytes());
+			}
+		
 		}
 		
 		else{
-			System.out.println("No mobile found");
+			System.out.println("No connection found");
 			return false;
 		}
+
 		
 	}
 
